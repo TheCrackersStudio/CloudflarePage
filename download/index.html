@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Download | Java & Stuff</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script defer src="https://unpkg.com/@alpinejs/collapse@3.x.x/dist/cdn.min.js"></script>
+  <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+  <style>
+    body { background-color: #0b0b0d; color: aliceblue; font-family: Inter, system-ui, sans-serif; }
+    .dropdown-card { background-color: #121216; border: 1px solid #2d2d2d; }
+    .bg-blue { background-color: #0e87f9; }
+    [x-cloak] { display: none !important; }
+  </style>
+</head>
+<body class="flex items-center justify-center min-h-screen p-6">
+
+<div class="w-full max-w-sm" x-data="modpackDownloader" x-init="init()" x-cloak>
+
+  <!-- Header -->
+  <div class="text-center mb-8">
+    <h1 class="text-3xl font-black tracking-tight text-white">Java & Stuff</h1>
+
+    <div class="mt-2">
+      <p class="text-xs uppercase tracking-widest text-zinc-500 font-bold">
+        Latest Version
+      </p>
+      <p class="text-lg font-bold text-white">
+        <span x-show="!isLoading" x-text="latestVersion ? 'v' + latestVersion : '—'"></span>
+        <span x-show="isLoading" class="text-zinc-500">Loading...</span>
+      </p>
+    </div>
+  </div>
+
+  <div class="dropdown-card rounded-2xl shadow-2xl overflow-hidden">
+
+    <!-- Platform Selection -->
+    <div class="relative border-b border-zinc-800">
+      <button @click="toggle('p')"
+              class="w-full p-5 flex justify-between items-center hover:bg-zinc-800/40 transition-all">
+        <div class="text-left">
+          <p class="text-[10px] uppercase tracking-widest text-zinc-500 font-bold">
+            Platform
+          </p>
+          <p class="font-bold text-lg"
+             :class="selectedPlatform !== 'Select Platform' ? 'text-white' : 'text-zinc-600'"
+             x-text="selectedPlatform">
+          </p>
+        </div>
+
+        <svg class="w-5 h-5 text-zinc-600 transition-transform duration-300"
+             :class="open === 'p' ? 'rotate-180' : ''"
+             fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path d="M19 9l-7 7-7-7"
+                stroke-width="2.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"/>
+        </svg>
+      </button>
+
+      <div x-show="open === 'p'" x-collapse>
+        <div class="bg-zinc-900/50 text-sm">
+          <template x-for="p in platforms" :key="p">
+            <div @click="selectPlatform(p)"
+                 class="px-5 py-4 hover:bg-blue/10 hover:text-blue-400 cursor-pointer border-t border-zinc-800/50 transition-colors flex items-center justify-between">
+              <span class="font-medium" x-text="p"></span>
+            </div>
+          </template>
+
+          <div x-show="platforms.length === 0"
+               class="px-5 py-4 text-zinc-400">
+            No platform builds found.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Download Button -->
+    <div class="p-4 bg-zinc-900/30">
+      <button
+        @click="triggerDownload"
+        :disabled="isDownloading || isLoading || selectedPlatform === 'Select Platform'"
+        class="w-full bg-blue hover:brightness-110 active:scale-[0.98] disabled:opacity-50 text-black font-black py-4 rounded-xl transition-all flex items-center justify-center gap-3 shadow-lg shadow-blue-500/20">
+
+        <span class="text-sm uppercase tracking-wider"
+              x-text="isDownloading
+                      ? 'Processing...'
+                      : (latestVersion
+                          ? 'Download v' + latestVersion + (selectedPlatform !== 'Select Platform' ? ' (' + selectedPlatform + ')' : '')
+                          : 'Download')">
+        </span>
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<script>
+const SUPABASE_URL = 'https://tkjicusxvwzpdkxmkumf.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRramljdXN4dnd6cGRreG1rdW1mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjcwOTU5NTQsImV4cCI6MjA4MjY3MTk1NH0.xCJNeYPmxIrTAkHB2pymv3GLX4e5jwzjGZYbhnOj6GI';
+
+const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+document.addEventListener('alpine:init', () => {
+  Alpine.data('modpackDownloader', () => ({
+    open: null,
+    isLoading: true,
+    isDownloading: false,
+
+    latestVersion: null,
+    platforms: [],
+    links: {},
+    selectedPlatform: 'Select Platform',
+
+    async init() {
+      try {
+        // 1️⃣ Get latest MODPACK version (using name column)
+        const { data: latestRow, error: latestError } = await supabaseClient
+          .from('versions')
+          .select('name')
+          .order('created_at', { ascending: false })
+          .limit(1)
+          .single();
+
+        if (latestError) throw latestError;
+
+        this.latestVersion = latestRow.name;
+
+        // 2️⃣ Get all platform builds for that version
+        const { data: rows, error } = await supabaseClient
+          .from('versions')
+          .select('platform, platforms, file_url')
+          .eq('name', this.latestVersion);
+
+        if (error) throw error;
+
+        const map = {};
+        const list = [];
+
+        for (const r of rows) {
+          let platformName = null;
+
+          if (r.platform && r.platform.trim() !== '') {
+            platformName = r.platform;
+          } else if (r.platforms && Array.isArray(r.platforms) && r.platforms.length > 0) {
+            platformName = r.platforms[0];
+          }
+
+          if (platformName && r.file_url) {
+            map[platformName] = r.file_url;
+            list.push(platformName);
+          }
+        }
+
+        this.links = map;
+        this.platforms = list;
+
+      } catch (err) {
+        console.error('Error fetching latest modpack version:', err);
+      } finally {
+        this.isLoading = false;
+      }
+    },
+
+    toggle(type) {
+      this.open = this.open === type ? null : type;
+    },
+
+    selectPlatform(p) {
+      this.selectedPlatform = p;
+      this.open = null;
+    },
+
+    async triggerDownload() {
+      if (this.isDownloading) return;
+
+      const url = this.links[this.selectedPlatform];
+      if (!url) return;
+
+      this.isDownloading = true;
+
+      try {
+        await supabaseClient.rpc('increment_downloads').catch(() => {});
+      } catch {}
+
+      const a = document.createElement('a');
+      a.href = url;
+      a.target = "_blank";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+
+      setTimeout(() => { this.isDownloading = false; }, 1500);
+    }
+  }));
+});
+</script>
+
+</body>
+</html>

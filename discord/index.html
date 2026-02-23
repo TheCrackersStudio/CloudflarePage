@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Discord</title>
+    <meta http-equiv="refresh" content="0; url=https://discord.gg/C5EGppjA4v">
+    <style>
+        body {
+            margin: 0;
+            background: #313338;
+            color: #dbdee1;
+            /* Discord's exact font stack */
+            font-family: "gg sans", "Noto Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+            display: grid;
+            place-items: center;
+            height: 100vh;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .wrap {
+            text-align: center;
+        }
+
+        .spinner {
+            width: 28px;
+            height: 28px;
+            border: 3px solid rgba(255,255,255,0.1);
+            border-top-color: #5865f2;
+            border-radius: 50%;
+            animation: rotate 0.7s linear infinite;
+            margin: 0 auto 16px;
+        }
+
+        @keyframes rotate {
+            to { transform: rotate(360deg); }
+        }
+
+        p {
+            font-size: 16px;
+            font-weight: 600;
+            margin: 0 0 8px;
+        }
+
+        a {
+            color: #00a8fc;
+            text-decoration: none;
+            font-size: 13px;
+            opacity: 0.8;
+        }
+
+        a:hover { opacity: 1; text-decoration: underline; }
+    </style>
+</head>
+<body>
+
+    <div class="wrap">
+        <div class="spinner"></div>
+        <p>Redirecting to Discord...</p>
+        <a href="https://discord.gg/C5EGppjA4v">Click here if you aren't redirected</a>
+    </div>
+
+    <script>
+        window.location.replace("https://discord.gg/C5EGppjA4v");
+    </script>
+</body>
+</html>
