@@ -186,15 +186,30 @@ img, svg {
   -webkit-user-select: none;
 }
 
-/* Individual tab button styling */
+/* ==================================== */
+/* Fixed Tabs Section                   */
+/* ==================================== */
+
+.tabs {
+  position: relative;
+  display: flex;
+  gap: 10px;
+  border-bottom: 1px solid var(--border);
+  user-select: none;
+  -webkit-user-select: none;
+  /* Keeps buttons grounded so they only animate UP */
+  align-items: flex-end; 
+}
+
 .tab {
   position: relative;
   padding: 14px 16px;
   color: var(--muted);
   cursor: pointer;
-  transition: color 0.2s, transform 0.2s;
   
-  /* Vertical alignment and spacing */
+  /* FLUID ANIMATION */
+  transition: color 0.2s ease, transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  
   display: inline-flex;
   align-items: center;
   gap: 10px; 
@@ -202,13 +217,31 @@ img, svg {
   /* Prevent text highlighting */
   user-select: none;
   -webkit-user-select: none; 
+  
+  /* Initial state */
+  transform: translateY(0);
 }
 
-/* Ensure the icon itself is centered */
+/* THE HOVER & ACTIVE UP EFFECT */
+.tab:hover, 
+.tab.active {
+  color: var(--text);
+  transform: translateY(-2px); /* Moves up fluidly */
+}
+
+/* CLICK EFFECT - Quick physical feedback */
+.tab:active {
+  transform: translateY(0); 
+  transition: transform 0.1s;
+}
+
+/* Ensure the icon itself is centered vertically */
 .tab i {
   display: flex;
   align-items: center;
   margin-right: 0 !important; 
+  font-size: 17px;
+  line-height: 1;
 }
   
 
@@ -487,13 +520,6 @@ section {
   vertical-align: middle;
 }
 
-/* Specific icons in tabs/download buttons need no right margin */
-.bi-card-text,
-.bi-image,
-.bi-archive,
-.dl {
-  margin-right: unset;
-}
 
 /* Avatar hover effect */
 .avatar{
