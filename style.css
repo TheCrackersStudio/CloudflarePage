@@ -1041,17 +1041,22 @@ details[open] > summary::before {
 /* outer framed shell that sits under the button (rounded, thick border like screenshot) */
 /* important: .dlmenu should live inside the same .dlrow so left:0 aligns to the button */
 .dlmenu {
+  position: absolute;           
   left: 0;
   top: calc(100% + 10px);
   width: 100%;
+
   padding: 12px;
   background: var(--panel);
   border: var(--panel) solid 10px;
   border-radius: 14px;
+
+  display: flex;                
+  flex-wrap: wrap;            
+  gap: 10px;                    
+
   z-index: 1200;
   overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
-  transition: all 0.5s ease;
 }
 
 
@@ -1061,21 +1066,18 @@ details[open] > summary::before {
 /* each pill item inside the menu */
 .dlmenu li {
   list-style: none;
-  margin: 10px 0;
-  padding: 11px 14px;
+  padding: 10px 16px;
   border-radius: 999px;
   background: var(--panel-2);
   color: var(--text);
   font-weight: 800;
-  text-align: center;
-  cursor: pointer;
-  user-select: none;
   border: 1px solid var(--border);
-  transition: transform 0.12s ease, background 0.12s ease, box-shadow 0.12s ease;
+
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
+
+  white-space: nowrap;      
 }
 
 /* hover/focus */
