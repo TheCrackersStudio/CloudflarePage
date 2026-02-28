@@ -1149,7 +1149,7 @@ details[open] > summary::before {
 
 
 
-/* --- Tighten space between title and description --- */
+/* --- my stuff --- */
 .title {
   margin-bottom: 2px;
   line-height: 1.15;
@@ -1157,4 +1157,10 @@ details[open] > summary::before {
 
 .desc {
   margin-top: 0;
+}
+
+#splash-status {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
 }
