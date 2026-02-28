@@ -185,6 +185,9 @@ img, svg {
 /* Individual tab button styling */
 .tab {
   position: relative;
+  display: flex;            
+  align-items: center;   /* some of the new stuff here fixes the tab thing */
+  gap: 8px;               
   padding: 14px 16px;
   color: var(--muted);
   cursor: pointer;
@@ -456,7 +459,7 @@ section {
 /* General Bootstrap Icon (bi) spacing adjustment */
 .bi {
   font-size: 17px;
-  margin-right: 10px;
+  margin-right: 0px;
 }
 
 /* Specific icons in tabs/download buttons need no right margin */
