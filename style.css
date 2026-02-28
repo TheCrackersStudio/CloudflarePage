@@ -81,7 +81,7 @@ img, svg {
 .header-card {
   display: flex;
   gap: 20px;
-  align-items: flex-end; 
+  align-items: flex-start; 
 }
 
 /* Project Icon styling */
