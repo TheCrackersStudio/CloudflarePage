@@ -1145,3 +1145,16 @@ details[open] > summary::before {
   overflow-y: auto;
   scrollbar-gutter: stable;
 }
+
+
+
+
+/* --- Tighten space between title and description --- */
+.title {
+  margin-bottom: 2px;
+  line-height: 1.15;
+}
+
+.desc {
+  margin-top: 0;
+}
