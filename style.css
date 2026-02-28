@@ -180,6 +180,10 @@ img, svg {
   display: flex;
   gap: 10px;
   border-bottom: 1px solid var(--border);
+  
+
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 /* Individual tab button styling */
@@ -189,9 +193,22 @@ img, svg {
   color: var(--muted);
   cursor: pointer;
   transition: color 0.2s, transform 0.2s;
-  display: inline-flex; 
-  align-items: center;  
-  gap: 10px;          
+  
+  /* Vertical alignment and spacing */
+  display: inline-flex;
+  align-items: center;
+  gap: 10px; 
+
+  /* Prevent text highlighting */
+  user-select: none;
+  -webkit-user-select: none; 
+}
+
+/* Ensure the icon itself is centered */
+.tab i {
+  display: flex;
+  align-items: center;
+  margin-right: 0 !important; 
 }
   
 
