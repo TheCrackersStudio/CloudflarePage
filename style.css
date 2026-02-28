@@ -189,6 +189,10 @@ img, svg {
   color: var(--muted);
   cursor: pointer;
   transition: color 0.2s, transform 0.2s;
+  
+
+  display: inline-flex; 
+  align-items: center;  
 }
 
 /* Active tab state */
@@ -457,6 +461,9 @@ section {
 .bi {
   font-size: 17px;
   margin-right: 10px;
+  
+  display: inline-block;
+  line-height: 1; 
 }
 
 /* Specific icons in tabs/download buttons need no right margin */
