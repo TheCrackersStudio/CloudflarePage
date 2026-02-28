@@ -184,18 +184,11 @@ img, svg {
 
 /* Individual tab button styling */
 .tab {
-  display: flex;
-  align-items: center;
-  gap: 10px;
+  position: relative;
   padding: 14px 16px;
-  line-height: 1;        
-}
-
-.tab i {
-  display: flex;           
-  align-items: center;
-  font-size: 17px;
-  line-height: 1;          
+  color: var(--muted);
+  cursor: pointer;
+  transition: color 0.2s, transform 0.2s;
 }
 
 /* Active tab state */
@@ -463,7 +456,7 @@ section {
 /* General Bootstrap Icon (bi) spacing adjustment */
 .bi {
   font-size: 17px;
-  margin-right: 0px;
+  margin-right: 10px;
 }
 
 /* Specific icons in tabs/download buttons need no right margin */
