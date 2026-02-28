@@ -189,6 +189,10 @@ img, svg {
   color: var(--muted);
   cursor: pointer;
   transition: color 0.2s, transform 0.2s;
+  display: inline-flex; 
+  align-items: center;  
+  gap: 10px;          
+}
   
 
   display: inline-flex; 
@@ -460,10 +464,10 @@ section {
 /* General Bootstrap Icon (bi) spacing adjustment */
 .bi {
   font-size: 17px;
-  margin-right: 10px;
-  
+  margin-right: 8px; 
   display: inline-block;
-  line-height: 1; 
+  line-height: 1;
+  vertical-align: middle;
 }
 
 /* Specific icons in tabs/download buttons need no right margin */
