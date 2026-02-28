@@ -207,26 +207,26 @@ img, svg {
   color: var(--muted);
   cursor: pointer;
   
-  /* FLUID ANIMATION */
+  /* FIX: Only animate color and transform. DO NOT use 'all' */
   transition: color 0.2s ease, transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   
   display: inline-flex;
   align-items: center;
   gap: 10px; 
 
-  /* Prevent text highlighting */
   user-select: none;
   -webkit-user-select: none; 
   
-  /* Initial state */
+  /* Forces the tab to stay in its layout slot */
   transform: translateY(0);
+  will-change: transform; 
 }
 
-/* THE HOVER & ACTIVE UP EFFECT */
+/* Group these so the active tab stays up */
 .tab:hover, 
 .tab.active {
   color: var(--text);
-  transform: translateY(-2px); /* Moves up fluidly */
+  transform: translateY(-2px);
 }
 
 /* CLICK EFFECT - Quick physical feedback */
