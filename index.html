@@ -609,8 +609,15 @@
     tabsContainer.appendChild(underline);
 
     function moveUnderline(el) {
-      underline.style.width = el.offsetWidth + 'px';
-      underline.style.left = el.offsetLeft + 'px';
+      const tabsContainer = document.querySelector('.tabs');
+      const containerRect = tabsContainer.getBoundingClientRect();
+      const elRect = el.getBoundingClientRect();
+    
+      // Calculate position relative to the parent container
+      const relativeLeft = elRect.left - containerRect.left;
+    
+      underline.style.width = elRect.width + 'px';
+      underline.style.transform = `translateX(${relativeLeft}px)`;
     }
 
     // Initialize underline position
