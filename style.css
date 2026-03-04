@@ -155,8 +155,8 @@ img, svg {
   font-weight: 700;
   padding: 14px 16px; /* Match tab padding */
   border-radius: 12px;
-  transition: color 0.2s ease, transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  transform: translateY(0);
+  transition: background 0.2s ease;
+  transform: none !important;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -166,7 +166,7 @@ img, svg {
 
 .btn-primary:hover {
   background: var(--blue-2);
-  transform: translateY(-2px); /* Match tab hover */
+  transform: none !important;
 }
 
 .btn-primary svg {
@@ -176,12 +176,7 @@ img, svg {
 
 /* Tab Underline */
 .tab-underline {
-  position: absolute;
-  bottom: 0;
-  height: 2px;
-  background: var(--blue);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  pointer-events: none;
+  display: none;
 }
 
 /* ==================================== */
@@ -198,70 +193,76 @@ img, svg {
 /* Tabs container for navigation */
 .tabs {
   position: relative;
-  display: flex;
-  gap: 10px;
-  border-bottom: 1px solid var(--border);
+  display: inline-flex;
+  gap: 0;
+  background: #1c1e22;
+  padding: 6px;
+  border-radius: 100px;
+  border: none;
   user-select: none;
   -webkit-user-select: none;
-  /* Keeps buttons grounded so they only animate UP */
-  align-items: flex-end; 
+  align-items: center;
+  margin-bottom: 20px;
+  z-index: 1;
+}
+
+.tab-slider {
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  height: calc(100% - 12px);
+  background: rgba(14, 135, 249, 0.15);
+  border-radius: 100px;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: -1;
+  pointer-events: none;
 }
 
 .tab {
   position: relative;
-  padding: 14px 16px;
-  color: var(--muted);
+  padding: 8px 24px;
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 16px;
   cursor: pointer;
-  
-  /* FIX: Only animate color and transform. DO NOT use 'all' */
-  transition: color 0.2s ease, transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  
+  transition: color 0.3s ease;
+  border-radius: 100px;
   display: inline-flex;
   align-items: center;
-  gap: 10px; 
-
-  user-select: none;
-  -webkit-user-select: none; 
-  
-  /* Forces the tab to stay in its layout slot */
-  transform: translateY(0);
-  will-change: transform; 
-  flex-shrink: 0;
-  text-align: center;
   justify-content: center;
+  user-select: none;
+  -webkit-user-select: none;
+  transform: none !important;
+  border: none;
+  background: none !important;
 }
 
-/* Group these so the active tab stays up */
-.tab:hover, 
-.tab.active {
-  color: var(--text);
-  transform: translateY(-2px);
-}
-
-/* CLICK EFFECT - Quick physical feedback */
-.tab:active {
-  transform: translateY(0); 
-  transition: transform 0.1s;
-}
-
-/* Ensure the icon itself is centered vertically */
-.tab i {
-  display: flex;
-  align-items: center;
-  margin-right: 0 !important; 
-  font-size: 17px;
-  line-height: 1;
-}
-
-/* Active tab state */
-.tab.active {
-  color: var(--text);
-  transform: translateY(-2px);
-}
-
-/* Floating text effect on hover */
 .tab:hover {
-  color: var(--text);
+  color: #ffffff;
+  transform: none !important;
+}
+
+.tab.active {
+  color: var(--blue);
+  transform: none !important;
+}
+
+/* Specific blue override for the active state as requested */
+.tab.active {
+  color: var(--blue); /* Your blue variable */
+}
+
+/* Remove the underline and other old tab styles */
+.tab-underline {
+  display: none;
+}
+
+.tab:active {
+  transform: none !important;
+}
+
+.tab i {
+  display: none !important;
 }
 
 /* Wrapper for the tab panels to control sliding/height */
@@ -910,8 +911,11 @@ details.is-open > summary::before {
 
    /* Centered Tabs */
   .tabs {
+    display: flex;
     align-items: center;
     justify-content: center;
+    margin: 0 auto 20px auto;
+    width: fit-content;
   }
   
   /* Sidebar moves below main content (managed by JS clone) */
@@ -1002,82 +1006,88 @@ details.is-open > summary::before {
   z-index: 9999;
   padding: 22px;
   -webkit-font-smoothing: antialiased;
-  transition: all 0.5s ease;
-  backdrop-filter: blur(5px);
 }
 
-/* hide utility */
-.dlmodal.hidden { display: none; }
+.dlmodal.hidden {
+  display: none;
+}
 
-/* Dialog card */
+/* modal container */
 .dlbox {
-  width: 360px; /* Refined size */
-  max-width: calc(100% - 48px);
-  background: var(--panel-2);
-  border-radius: 24px; /* More curved corners */
-  padding: 24px;
-  color: var(--text);
   position: relative;
-  box-shadow: 0 18px 44px rgba(2,8,18,0.6);
-  border: 1px solid var(--border);
-  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  width: 100%;
+  max-width: 460px;
+  background: #111114;
+  border: 1px solid #1c1c22;
+  border-radius: 20px;
+  padding: 28px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+  animation: modalIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
+@keyframes modalIn {
+  from { opacity: 0; transform: translateY(10px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* Close button (top right) */
 .dl-close {
   position: absolute;
   top: 20px;
   right: 20px;
-  color: var(--muted);
   font-size: 20px;
+  color: #555566;
   transition: color 0.2s;
 }
 
-.dl-close:hover { color: var(--text); }
-
-.dltitle {
-  font-size: 1.25rem;
-  font-weight: 700;
-  margin-bottom: 24px;
+.dl-close:hover {
+  color: #ffffff;
 }
 
+/* Modal Title */
+.dltitle {
+  font-size: 22px;
+  font-weight: 800;
+  margin-bottom: 24px;
+  color: #ffffff;
+}
+
+/* Row wrapper for selects */
 .dlrow {
-  margin-bottom: 16px;
   position: relative;
-  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-  width: 100%;
+  margin-bottom: 12px;
+  transition: all 0.4s ease;
 }
 
 .dlrow.hidden {
   display: none;
 }
 
+/* Main select trigger */
 .dlselect {
   width: 100%;
-  background: var(--panel);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 14px 18px;
-  text-align: left;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  font-weight: 500;
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  position: relative;
-  z-index: 2;
-  outline: none; /* Removed blue outline */
+  background: #18181d;
+  border: 1px solid #24242b;
+  color: #ffffff;
+  padding: 14px 18px;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 15px;
+  transition: all 0.25s ease;
+  cursor: pointer;
+  text-align: left;
 }
 
-.dlselect:not(.disabled):hover {
-  border-color: var(--blue);
-  background: #1a1a22;
+.dlselect:hover:not(.disabled) {
+  background: #1c1c24;
+  border-color: #31313a;
 }
 
 .dlselect.is-active {
-  border-bottom-left-radius: 0;
-  border-bottom-right-radius: 0;
-  border-color: var(--border); /* Removed blue highlight */
+  border-color: #0e87f9;
+  box-shadow: 0 0 0 3px rgba(14, 135, 249, 0.15);
 }
 
 .dlselect.disabled {
@@ -1085,60 +1095,61 @@ details.is-open > summary::before {
   cursor: not-allowed;
 }
 
-.dlselect i {
-  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.dlselect.is-active i {
-  transform: rotate(180deg);
-}
-
+/* Custom dropdown menu */
 .dlmenu {
-  position: relative;
-  width: 100%;
-  background: var(--panel-2);
-  border: 1px solid var(--border); /* Removed blue border */
-  border-top: none;
-  border-bottom-left-radius: 12px;
-  border-bottom-right-radius: 12px;
-  max-height: 0; /* For animation */
-  opacity: 0;    /* For animation */
-  overflow: hidden;
-  z-index: 1;
-  list-style: none;
-  padding: 0 8px;
-  box-shadow: none;
-  margin: 0;
-  transition: max-height 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease, padding 0.4s ease;
-}
-
-.dlmenu.is-visible { 
-  max-height: 240px;
-  opacity: 1;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: #1c1c24;
+  border: 1px solid #2e2e38;
+  border-radius: 12px;
+  margin-top: 8px;
   padding: 8px;
+  z-index: 100;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  list-style: none;
+  max-height: 250px;
+  overflow-y: auto;
+  opacity: 0;
+  transform: translateY(-10px);
+  pointer-events: none;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.dlmenu.hidden { display: none; } /* Keeping for safety but transition uses is-visible */
+.dlmenu.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
 
 .dlmenu li {
-  padding: 8px 16px;
-  margin: 2px 4px;
-  border-radius: 999px; /* Oval highlight */
+  padding: 10px 14px;
+  border-radius: 8px;
   cursor: pointer;
-  transition: background 0.2s, color 0.2s;
+  font-size: 14px;
+  font-weight: 500;
+  color: #b5b5c8;
+  transition: all 0.2s;
   display: flex;
   align-items: center;
+  justify-content: space-between;
 }
 
 .dlmenu li:hover {
-  background: rgba(14, 135, 249, 0.1); /* Subtle blue tint like Modrinth */
-  color: var(--blue);
+  background: #282834;
+  color: #ffffff;
 }
 
-.dlactions { 
-  margin-top: 24px; 
-  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-  width: 100%;
+.dlmenu li.selected {
+  background: rgba(14, 135, 249, 0.1);
+  color: #0e87f9;
+}
+
+/* Modal Actions (Primary Download) */
+.dlactions {
+  margin-top: 24px;
+  transition: all 0.4s ease;
 }
 
 .dlactions.hidden {
@@ -1147,21 +1158,33 @@ details.is-open > summary::before {
 
 .dlbtn-primary {
   width: 100%;
-  background: var(--blue);
-  color: #fff;
-  font-weight: 700;
+  background: #0e87f9;
+  color: white;
+  border: none;
   padding: 16px;
   border-radius: 12px;
-  font-size: 1rem;
-  transition: background 0.2s, opacity 0.2s;
-  outline: none; /* Removed blue outline */
+  font-weight: 700;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
 }
 
-.dlbtn-primary:not(.disabled):hover {
-  background: var(--blue-2);
+.dlbtn-primary:hover:not(.disabled) {
+  background: #0d79e0;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(14, 135, 249, 0.3);
+}
+
+.dlbtn-primary:active:not(.disabled) {
+  transform: translateY(0);
 }
 
 .dlbtn-primary.disabled {
-  opacity: 0.5;
+  background: #24242b;
+  color: #555566;
   cursor: not-allowed;
 }
