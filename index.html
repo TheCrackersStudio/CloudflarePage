@@ -69,9 +69,10 @@
   <main class="container main">
     <section>
       <div class="tabs">
-        <button class="tab active" data-tab="desc"><i id="icons" class="bi bi-card-text"></i> Description</button>
-        <button class="tab" data-tab="gallery"><i class="bi bi-image"></i> Gallery</button>
-        <button class="tab" data-tab="versions"><i class="bi bi-archive"></i> Versions</button>
+        <div class="tab-slider"></div>
+        <button class="tab active" data-tab="desc">Description</button>
+        <button class="tab" data-tab="gallery">Gallery</button>
+        <button class="tab" data-tab="versions">Versions</button>
       </div>
 
       <div class="tab-panel active" id="desc">
@@ -588,6 +589,49 @@
       return Promise.all(promises);
     }
 
+    /* ===============================
+      TAB SYSTEM
+    ================================ */
+    const tabs = document.querySelectorAll('.tab');
+    const panels = document.querySelectorAll('.tab-panel');
+    const slider = document.querySelector('.tab-slider');
+
+    function updateSlider(activeTab) {
+      if (!slider) return;
+      slider.style.width = `${activeTab.offsetWidth}px`;
+      slider.style.left = `${activeTab.offsetLeft}px`;
+    }
+
+    // Initialize slider position
+    const activeTabInit = document.querySelector('.tab.active');
+    if (activeTabInit) {
+      setTimeout(() => updateSlider(activeTabInit), 100);
+    }
+
+    tabs.forEach(tab => {
+      tab.addEventListener('click', async () => {
+        if (tab.classList.contains('active')) return;
+
+        tabs.forEach(t => t.classList.remove('active'));
+        panels.forEach(p => p.classList.remove('active'));
+
+        tab.classList.add('active');
+        updateSlider(tab);
+
+        const target = tab.getAttribute('data-tab');
+        const panel = document.getElementById(target);
+        if (panel) panel.classList.add('active');
+
+        if (target === "gallery") await loadGallery();
+        if (target === "versions") await loadVersions();
+      });
+    });
+
+    window.addEventListener('resize', () => {
+      const active = document.querySelector('.tab.active');
+      if (active) updateSlider(active);
+    });
+
     async function bootApp() {
       if (document.readyState !== "complete") {
         await new Promise(r => window.addEventListener("load", r, { once: true }));
@@ -619,53 +663,23 @@
 
     bootApp();
 
-    const tabs=document.querySelectorAll('.tab');
-    const panels=document.querySelectorAll('.tab-panel');
-
     if (window.innerWidth <= 768) {
       const sidebar = document.querySelector('.sidebar');
       const tabPanels = document.querySelectorAll('.tab-panel');
       tabPanels.forEach(panel => {
         panel.appendChild(sidebar.cloneNode(true));
       });
-      sidebar.style.display = 'none';
+      if (sidebar) sidebar.style.display = 'none';
     }
-
-    // Tab Underline Animation Setup
-    const tabsContainer = document.querySelector('.tabs');
-    const underline = document.createElement('div');
-    underline.className = 'tab-underline';
-    tabsContainer.appendChild(underline);
-
-    function updateUnderline() {
-      const activeTab = document.querySelector('.tab.active');
-      if (activeTab) {
-        underline.style.width = `${activeTab.offsetWidth}px`;
-        underline.style.left = `${activeTab.offsetLeft}px`;
-      }
-    }
-
-    setTimeout(updateUnderline, 500);
-
-    window.addEventListener('resize', updateUnderline);
 
     // Wrap existing tab panels into a sliding wrapper
     const section = document.querySelector('section');
-    const wrapper = document.createElement('div');
-    wrapper.className = 'tab-panels-wrapper';
-    panels.forEach(p => wrapper.appendChild(p));
-    section.appendChild(wrapper);
-
-    tabs.forEach(tab => {
-      tab.addEventListener('click', () => {
-        tabs.forEach(t => t.classList.remove('active'));
-        panels.forEach(p => p.classList.remove('active'));
-        tab.classList.add('active');
-        const target = tab.getAttribute('data-tab');
-        document.getElementById(target).classList.add('active');
-        updateUnderline();
-      });
-    });
+    if (section) {
+      const wrapper = document.createElement('div');
+      wrapper.className = 'tab-panels-wrapper';
+      document.querySelectorAll('.tab-panel').forEach(p => wrapper.appendChild(p));
+      section.appendChild(wrapper);
+    }
 
     lottie.loadAnimation({
       container: document.getElementById("splash-lottie"),
@@ -767,17 +781,21 @@
     const next_m = document.getElementById("next");
     const prev_m = document.getElementById("prev");
 
-    next_m.addEventListener("click", () => {
-      next_m.classList.remove("animater");
-      void next_m.offsetWidth;
-      next_m.classList.add("animater");
-    });
+    if (next_m) {
+      next_m.addEventListener("click", () => {
+        next_m.classList.remove("animater");
+        void next_m.offsetWidth;
+        next_m.classList.add("animater");
+      });
+    }
 
-    prev_m.addEventListener("click", () => {
-      prev_m.classList.remove("animatel");
-      void prev_m.offsetWidth;
-      prev_m.classList.add("animatel");
-    });
+    if (prev_m) {
+      prev_m.addEventListener("click", () => {
+        prev_m.classList.remove("animatel");
+        void prev_m.offsetWidth;
+        prev_m.classList.add("animatel");
+      });
+    }
 
     document.getElementById("desc").addEventListener("click", e => {
       const summary = e.target.closest("summary");
