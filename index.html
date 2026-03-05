@@ -159,14 +159,24 @@
     </div>
   </footer>
   
-<div id="lightbox" class="lightbox">
-  <button class="lightbox-close" aria-label="Close">✕</button>
 
-  <div class="lightbox-viewport">
-    <div class="lightbox-track">
-      <img class="lightbox-slide" />
-      <img class="lightbox-slide" />
+  <div id="lightbox" class="lightbox">
+    <div class="lightbox-controls">
+      <button class="lightbox-btn" id="lt-close" title="Close"><i class="bi bi-x-lg"></i></button>
+      <button class="lightbox-btn" id="lt-open-link" title="Open in new tab"><i class="bi bi-box-arrow-up-right"></i></button>
+      <button class="lightbox-btn" id="lt-fullscreen" title="Fullscreen"><i class="bi bi-arrows-fullscreen"></i></button>
+      <div class="lightbox-divider"></div>
+      <button class="lightbox-btn" id="lt-prev" title="Previous"><i class="bi bi-arrow-left"></i></button>
+      <button class="lightbox-btn" id="lt-next" title="Next"><i class="bi bi-arrow-right"></i></button>
     </div>
+
+    <div class="lightbox-viewport">
+      <div class="lightbox-track">
+        <img class="lightbox-slide" />
+      </div>
+    </div>
+  </div>
+  
   </div>
   <div class="navs">  
   <button class="lightbox-nav prev" id="prev" aria-label="Previous">‹</button>
@@ -245,33 +255,80 @@
         marked.parse(data?.description || "No description.");
     }
 
-    async function loadGallery() {
-      setStatus("Loading gallery…");
-      const { data, error } = await supabase
-        .from("gallery_items")
-        .select("*")
-        .order("created_at", { ascending: true });
+    
+      /* ===============================
+        IMAGE VIEWER (LIGHTBOX)
+      =============================== */
+      const lightboxEl = document.getElementById("lightbox");
+      const ltClose = document.getElementById("lt-close");
+      const ltOpenLink = document.getElementById("lt-open-link");
+      const ltFullscreen = document.getElementById("lt-fullscreen");
+      const ltPrev = document.getElementById("lt-prev");
+      const ltNext = document.getElementById("lt-next");
+      const lbSlide = lightboxEl.querySelector(".lightbox-slide");
 
-      if (error) throw error;
+      let currentGallery = [];
+      let galleryIndex = 0;
 
-      const container = document.getElementById("gallery-list");
-      container.innerHTML = "";
+      function updateLightbox() {
+        lbSlide.src = currentGallery[galleryIndex].image_url;
+      }
 
-      data.forEach(item => {
-        const div = document.createElement("div");
-        div.className = "gcard";
-        div.innerHTML = `
-          <div class="gimg">
-            <img src="${item.image_url}" class="gallery-img"/>
-          </div>
-          <div class="gbody">
-            <div class="gtitle">${item.title}</div>
-            <div class="gmeta">${item.details}</div>
-          </div>
-        `;
-        container.appendChild(div);
+      function openLightbox(index, items) {
+        currentGallery = items;
+        galleryIndex = index;
+        updateLightbox();
+        lightboxEl.classList.add("open");
+        document.body.style.overflow = "hidden";
+      }
+
+      function closeLightbox() {
+        lightboxEl.classList.remove("open");
+        document.body.style.overflow = "";
+        if (document.fullscreenElement) document.exitFullscreen();
+      }
+
+      if (ltClose) ltClose.addEventListener("click", closeLightbox);
+      if (ltOpenLink) ltOpenLink.addEventListener("click", () => window.open(currentGallery[galleryIndex].image_url, "_blank"));
+      if (ltFullscreen) ltFullscreen.addEventListener("click", () => {
+        if (!document.fullscreenElement) lightboxEl.requestFullscreen().catch(e => console.error(e));
+        else document.exitFullscreen();
       });
-    }
+      if (ltPrev) ltPrev.addEventListener("click", () => {
+        galleryIndex = (galleryIndex - 1 + currentGallery.length) % currentGallery.length;
+        updateLightbox();
+      });
+      if (ltNext) ltNext.addEventListener("click", () => {
+        galleryIndex = (galleryIndex + 1) % currentGallery.length;
+        updateLightbox();
+      });
+
+      lightboxEl.addEventListener("click", (e) => {
+        if (e.target === lightboxEl || e.target.classList.contains("lightbox-viewport")) closeLightbox();
+      });
+
+      document.addEventListener("keydown", (e) => {
+        if (!lightboxEl.classList.contains("open")) return;
+        if (e.key === "Escape") closeLightbox();
+        if (e.key === "ArrowLeft") ltPrev && ltPrev.click();
+        if (e.key === "ArrowRight") ltNext && ltNext.click();
+      });
+
+      async function loadGallery() {
+        setStatus("Loading gallery…");
+        const { data, error } = await supabase.from("gallery_items").select("*").order("created_at", { ascending: true });
+        if (error) throw error;
+        const container = document.getElementById("gallery-list");
+        container.innerHTML = "";
+        data.forEach((item, index) => {
+          const div = document.createElement("div");
+          div.className = "gcard";
+          div.innerHTML = `<div class="gimg"><img src="${item.image_url}" class="gallery-img"/></div><div class="gbody"><div class="gtitle">${item.title}</div><div class="gmeta">${item.details}</div></div>`;
+          div.addEventListener("click", () => openLightbox(index, data));
+          container.appendChild(div);
+        });
+      }
+  
 
     async function loadVersions() {
       setStatus("Loading versions…");
