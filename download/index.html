@@ -257,8 +257,25 @@ document.addEventListener('alpine:init', () => {
       this.showDownloadMessage = false;
 
       try {
-        await supabaseClient.rpc('increment_downloads').catch(() => {});
-      } catch {}
+        // Update download stats: increment total_downloads and set updated_at
+        const { data: currentStats } = await supabaseClient
+          .from('download_stats')
+          .select('total_downloads')
+          .eq('id', 1)
+          .single();
+
+        if (currentStats) {
+          await supabaseClient
+            .from('download_stats')
+            .update({
+              total_downloads: (currentStats.total_downloads || 0) + 1,
+              updated_at: new Date().toISOString()
+            })
+            .eq('id', 1);
+        }
+      } catch (err) {
+        console.error('Failed to update download stats:', err);
+      }
 
       // Countdown timer
       const countdownInterval = setInterval(() => {
