@@ -10,14 +10,14 @@
   <meta name="robots" content="index, follow">
   <meta name="author" content="TheCrackersStudio">
 
-  <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
 
-  <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
-  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-  <link rel="shortcut icon" href="/favicon.ico" />
-  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-  <link rel="manifest" href="/site.webmanifest" />
+  <link rel="icon" type="image/png" href="favicon-96x96.png" sizes="96x96" />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <link rel="shortcut icon" href="favicon.ico" />
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
+  <link rel="manifest" href="site.webmanifest" />
 
   <meta name="msapplication-TileColor" content="#ffffff">
   <meta name="theme-color" content="#fcfc37">
@@ -136,6 +136,13 @@
             <div>NuzFlameV2</div>
           </div>
         </div>
+
+        <div class="creator">
+          <div class="avatar"><img style="border-radius: 50%;" width="40" src="https://cdn.discordapp.com/avatars/1084149244904079451/5219740c05a24b6e8411d68e23e6af0e.png?size=1024"></div>
+          <div>
+            <div>!goopi</div>
+          </div>
+        </div>
       </div>
 
       <div class="card">
@@ -251,8 +258,78 @@
 
       if (error) throw error;
 
-      document.getElementById("desc-content").innerHTML =
-        marked.parse(data?.description || "No description.");
+      const container = document.getElementById("desc-content");
+      container.innerHTML = marked.parse(data?.description || "No description.");
+
+      // Wrap each heading that is followed by a list into an animated collapsible
+      Array.from(container.querySelectorAll("h2, h3")).forEach(heading => {
+        const nextEl = heading.nextElementSibling;
+        if (!nextEl || (nextEl.tagName !== "UL" && nextEl.tagName !== "OL")) return;
+
+        const contentNodes = [];
+        let cur = nextEl;
+        while (cur && (cur.tagName === "UL" || cur.tagName === "OL" || cur.tagName === "P")) {
+          contentNodes.push(cur);
+          cur = cur.nextElementSibling;
+        }
+
+        const details = document.createElement("details");
+        const summary = document.createElement("summary");
+        summary.textContent = heading.textContent;
+        details.appendChild(summary);
+
+        const wrapper = document.createElement("div");
+        wrapper.className = "details-wrapper";
+        contentNodes.forEach(node => wrapper.appendChild(node));
+        details.appendChild(wrapper);
+
+        heading.replaceWith(details);
+      });
+
+      // Animate open/close with smooth max-height
+      function setupDetailsToggle(det) {
+        const summary = det.querySelector("summary");
+        const wrapper = det.querySelector(".details-wrapper");
+
+        if (!summary || !wrapper) return;
+
+        // Close by default
+        det.removeAttribute("open");
+        det.classList.remove("is-open");
+        wrapper.style.maxHeight = "0px";
+        wrapper.style.opacity = "0";
+
+        summary.addEventListener("click", (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          
+          if (!det.classList.contains("is-open")) {
+            // Opening animation
+            det.classList.add("is-open");
+            det.setAttribute("open", "");
+            
+            // Force reflow to ensure transition happens
+            void wrapper.offsetHeight;
+            
+            const scrollHeight = wrapper.scrollHeight;
+            wrapper.style.maxHeight = scrollHeight + "px";
+            wrapper.style.opacity = "1";
+          } else {
+            // Closing animation
+            det.classList.remove("is-open");
+            wrapper.style.maxHeight = "0px";
+            wrapper.style.opacity = "0";
+            
+            setTimeout(() => {
+              if (!det.classList.contains("is-open")) {
+                det.removeAttribute("open");
+              }
+            }, 500);
+          }
+        });
+      }
+
+      container.querySelectorAll("details").forEach(setupDetailsToggle);
     }
 
     
@@ -346,17 +423,22 @@
         const row = document.createElement("div");
         row.className = "rowv";
         row.innerHTML = `
-          <div class="verbadge">R</div>
-          <div>${item.name}</div>
-          <div><span class="badge">${item.game_version}</span></div>
-          <div class="platforms">
-            ${item.platforms.map(p => `<span class="badge pill">${p}</span>`).join("")}
+          <div class="ver-left">
+            <div class="verbadge">R</div>
+            <div class="ver-info">
+              <div class="ver-name">${item.name}</div>
+              <div class="ver-desc">Java & Stuff ${item.name}</div>
+            </div>
           </div>
-          <div></div>
-          <div></div>
-          <div>
-            <a class="dlbtn" href="${item.file_url}" data-download>
-              <i class="bi-download dlsvg"></i>
+          <div class="ver-meta">
+            <div class="ver-game"><span class="badge">${item.game_version}</span></div>
+            <div class="platforms">
+              ${item.platforms.map(p => `<span class="badge pill">${p}</span>`).join("")}
+            </div>
+          </div>
+          <div class="ver-actions">
+            <a class="dlbtn-ver" href="${item.file_url}" data-download>
+              <i class="bi bi-download"></i>
             </a>
           </div>
         `;
@@ -630,15 +712,14 @@
     const mainDownloadBtn = document.getElementById("download-btn");
     if (mainDownloadBtn) {
       mainDownloadBtn.addEventListener("click", (e) => {
-        try { triggerAnimation(); } catch (err) { }
-        openModal();
+        window.location.href = "download/index.html";
       });
     }
 
     function waitForImages(container) {
       const imgs = Array.from(container.querySelectorAll("img"));
       const promises = imgs.map(img => {
-        if (img.complete && img.naturalWidth !== 0) return Promise.resolve();
+        if (img.complete) return Promise.resolve();
         return new Promise(resolve => {
           img.onload = img.onerror = resolve;
         });
