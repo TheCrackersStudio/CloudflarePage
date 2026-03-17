@@ -168,49 +168,67 @@ document.addEventListener('alpine:init', () => {
 
     async init() {
       try {
-        // 1️⃣ Get latest MODPACK version (using name column)
-        const { data: latestRow, error: latestError } = await supabaseClient
+        // Fetch all versions with full data
+        const { data, error } = await supabaseClient
           .from('versions')
-          .select('name')
-          .order('created_at', { ascending: false })
-          .limit(1)
-          .single();
+          .select('*')
+          .order('created_at', { ascending: false });
 
-        if (latestError) throw latestError;
+        if (error) {
+          console.error('Supabase error:', error);
+          throw error;
+        }
 
-        this.latestVersion = latestRow.name;
+        if (!data || data.length === 0) {
+          console.warn('No versions found in database');
+          this.isLoading = false;
+          return;
+        }
 
-        // 2️⃣ Get all platform builds for that version
-        const { data: rows, error } = await supabaseClient
-          .from('versions')
-          .select('platform, platforms, file_url')
-          .eq('name', this.latestVersion);
+        console.log('All versions:', data);
 
-        if (error) throw error;
+        // Get the latest version
+        this.latestVersion = data[0].name;
+        console.log('Latest version:', this.latestVersion);
 
+        // Build map of platforms to download links for the latest version
         const map = {};
         const list = [];
 
-        for (const r of rows) {
+        data.forEach(row => {
+          // Only process versions matching the latest
+          if (row.name !== this.latestVersion) return;
+
+          console.log('Processing row:', row);
+
+          // Try to get platform name - handle both single platform and array
           let platformName = null;
-
-          if (r.platform && r.platform.trim() !== '') {
-            platformName = r.platform;
-          } else if (r.platforms && Array.isArray(r.platforms) && r.platforms.length > 0) {
-            platformName = r.platforms[0];
+          
+          if (row.platform && row.platform.trim() !== '') {
+            platformName = row.platform;
+          } else if (row.platforms && Array.isArray(row.platforms) && row.platforms.length > 0) {
+            platformName = row.platforms[0];
           }
 
-          if (platformName && r.file_url) {
-            map[platformName] = r.file_url;
-            list.push(platformName);
+          console.log('Platform:', platformName, 'URL:', row.file_url);
+
+          if (platformName && row.file_url) {
+            if (!list.includes(platformName)) {
+              list.push(platformName);
+            }
+            map[platformName] = row.file_url;
           }
-        }
+        });
+
+        console.log('Final platforms:', list);
+        console.log('Final links:', map);
 
         this.links = map;
         this.platforms = list;
 
       } catch (err) {
-        console.error('Error fetching latest modpack version:', err);
+        console.error('Error fetching versions:', err);
+        alert('Failed to load versions. Check console for details.');
       } finally {
         this.isLoading = false;
       }
@@ -257,21 +275,8 @@ document.addEventListener('alpine:init', () => {
       if (!url) return;
 
       try {
-        // Download in the background using fetch + blob so it does not open a new tab
-        const response = await fetch(url);
-        const blob = await response.blob();
-        const objectUrl = URL.createObjectURL(blob);
-
-        const a = document.createElement('a');
-        a.href = objectUrl;
-        a.download = '';
-        a.style.display = 'none';
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-
-        // Clean up
-        setTimeout(() => URL.revokeObjectURL(objectUrl), 30000);
+        // Open download URL in a new tab to avoid CORS issues
+        window.open(url, '_blank');
       } catch (err) {
         console.error('Download failed:', err);
       }
