@@ -35,14 +35,15 @@
   <meta name="twitter:image" content="https://www.javanstuff.ir/discordembed.png">
 
   <!-- Styles & Scripts -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" />
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script defer src="https://unpkg.com/@alpinejs/collapse@3.x.x/dist/cdn.min.js"></script>
   <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
   <style>
-    body { background-color: #0b0b0d; color: aliceblue; font-family: Inter, system-ui, sans-serif; }
-    .dropdown-card { background-color: #121216; border: 1px solid #2d2d2d; }
+    body { background-color: rgb(22, 24, 28); color: aliceblue; font-family: Inter, system-ui, sans-serif; }
+    .dropdown-card { background-color: rgb(40, 41, 46); border: 1px solid #2e2e3b; }
     .bg-blue { background-color: #0e87f9; }
     [x-cloak] { display: none !important; }
   </style>
@@ -82,7 +83,7 @@
           </p>
         </div>
 
-        <svg class="w-5 h-5 text-zinc-600 transition-transform duration-300"
+        <svg class="w-5 h-5 text-zinc-600 transition-transform duration-75 ease-linear"
              :class="open === 'p' ? 'rotate-180' : ''"
              fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path d="M19 9l-7 7-7-7"
@@ -110,7 +111,7 @@
     </div>
 
     <!-- Download Button -->
-    <div class="p-4 bg-zinc-900/30">
+    <div class="p-4" style="background-color: rgba(46, 46, 59, 0.3);">
       <button
         @click="triggerDownload"
         :disabled="isDownloading || isLoading || selectedPlatform === 'Select Platform'"
@@ -123,6 +124,23 @@
                           ? 'Download v' + latestVersion + (selectedPlatform !== 'Select Platform' ? ' (' + selectedPlatform + ')' : '')
                           : 'Download')">
         </span>
+      </button>
+
+      <!-- Download Timer Message -->
+      <div x-show="downloadCountdown > 0" class="mt-4 p-3 rounded-lg text-center text-sm" style="background-color: rgba(14, 135, 249, 0.1); border: 1px solid rgba(14, 135, 249, 0.3); color: #8bc7ff;">
+        <p x-text="`Download will begin in ${downloadCountdown} second${downloadCountdown !== 1 ? 's' : ''}...`"></p>
+      </div>
+
+      <!-- Download Started Message -->
+      <div x-show="showDownloadMessage && downloadCountdown === 0" class="mt-4 p-3 rounded-lg text-center text-sm" style="background-color: rgba(14, 135, 249, 0.1); border: 1px solid rgba(14, 135, 249, 0.3); color: #8bc7ff;">
+        <p>Download started! If it did not begin, click the button below.</p>
+      </div>
+
+      <!-- Fallback Download Button -->
+      <button x-show="showDownloadMessage && downloadCountdown === 0"
+              @click="startDownload()"
+              class="w-full mt-3 bg-zinc-700 hover:bg-zinc-600 active:scale-[0.98] text-white font-semibold py-2 rounded-lg transition-all text-sm">
+        Click here to download
       </button>
     </div>
 
@@ -140,6 +158,8 @@ document.addEventListener('alpine:init', () => {
     open: null,
     isLoading: true,
     isDownloading: false,
+    downloadCountdown: 0,
+    showDownloadMessage: false,
 
     latestVersion: null,
     platforms: [],
@@ -211,20 +231,56 @@ document.addEventListener('alpine:init', () => {
       const url = this.links[this.selectedPlatform];
       if (!url) return;
 
+      // Close dropdown immediately when starting download
+      this.open = null;
+
       this.isDownloading = true;
+      this.downloadCountdown = 10;
+      this.showDownloadMessage = false;
 
       try {
         await supabaseClient.rpc('increment_downloads').catch(() => {});
       } catch {}
 
-      const a = document.createElement('a');
-      a.href = url;
-      a.target = "_blank";
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
+      // Countdown timer
+      const countdownInterval = setInterval(() => {
+        this.downloadCountdown--;
+        if (this.downloadCountdown <= 0) {
+          clearInterval(countdownInterval);
+          this.startDownload();
+        }
+      }, 1000);
+    },
 
-      setTimeout(() => { this.isDownloading = false; }, 1500);
+    async startDownload() {
+      const url = this.links[this.selectedPlatform];
+      if (!url) return;
+
+      try {
+        // Download in the background using fetch + blob so it does not open a new tab
+        const response = await fetch(url);
+        const blob = await response.blob();
+        const objectUrl = URL.createObjectURL(blob);
+
+        const a = document.createElement('a');
+        a.href = objectUrl;
+        a.download = '';
+        a.style.display = 'none';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+
+        // Clean up
+        setTimeout(() => URL.revokeObjectURL(objectUrl), 30000);
+      } catch (err) {
+        console.error('Download failed:', err);
+      }
+
+      this.showDownloadMessage = true;
+      this.downloadCountdown = 0;
+
+      // Keep the download state visible until user refreshes/reloads.
+      // (No automatic reset.)
     }
   }));
 });
