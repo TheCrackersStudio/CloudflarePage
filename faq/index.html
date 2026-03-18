@@ -45,37 +45,51 @@
       box-shadow: 0 0 0 3px rgba(14, 135, 249, 0.15);
     }
 
-    /* Category filter pills */
+    /* Category filter — tab slider bar */
     .faq-cats {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-bottom: 24px;
+      position: relative;
+      display: inline-flex;
+      gap: 0;
+      background: #1c1e22;
+      padding: 6px;
+      border-radius: 100px;
+      align-items: center;
+      margin-bottom: 20px;
+      z-index: 1;
+    }
+
+    .faq-cat-slider {
+      position: absolute;
+      top: 6px;
+      left: 6px;
+      height: calc(100% - 12px);
+      background: rgba(14, 135, 249, 0.15);
+      border-radius: 100px;
+      transition: left 0.38s cubic-bezier(0.16, 1, 0.3, 1),
+                  width 0.38s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 0;
+      pointer-events: none;
     }
 
     .faq-cat {
-      padding: 6px 16px;
-      border-radius: 999px;
-      background: #1c1e22;
-      border: 1px solid var(--border);
-      color: var(--muted);
-      font-size: 13px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      user-select: none;
-    }
-
-    .faq-cat:hover {
-      border-color: #45455a;
+      position: relative;
+      z-index: 1;
+      padding: 8px 18px;
+      border-radius: 100px;
+      background: none;
+      border: none;
       color: var(--text);
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: color 0.25s ease, transform 0.1s ease;
+      user-select: none;
+      white-space: nowrap;
     }
 
-    .faq-cat.active {
-      background: rgba(14, 135, 249, 0.12);
-      border-color: var(--blue);
-      color: var(--blue);
-    }
+    .faq-cat:hover { color: #fff; }
+    .faq-cat.active { color: var(--blue); }
+    .faq-cat:active { transform: scale(0.92); }
 
     /* No results state */
     .faq-empty {
@@ -321,6 +335,7 @@
 
       <!-- Category filters -->
       <div class="faq-cats" id="faqCats">
+        <div class="faq-cat-slider" id="faqSlider"></div>
         <button class="faq-cat active" data-cat="all">All</button>
         <button class="faq-cat" data-cat="general">General</button>
         <button class="faq-cat" data-cat="install">Install</button>
@@ -507,7 +522,34 @@
     const catButtons = document.querySelectorAll('.faq-cat');
     const emptyState = document.getElementById('faqEmpty');
     const countEl = document.getElementById('faqCount');
+    const slider = document.getElementById('faqSlider');
+    const catsWrap = document.getElementById('faqCats');
     let activeCat = 'all';
+
+    // ── Slider position ───────────────────────────────────────────
+    function moveSlider(btn) {
+      if (!slider || !catsWrap) return;
+      const wrapRect = catsWrap.getBoundingClientRect();
+      const btnRect  = btn.getBoundingClientRect();
+      slider.style.left  = (btnRect.left - wrapRect.left) + 'px';
+      slider.style.width = btnRect.width + 'px';
+    }
+
+    // Init slider without transition
+    const initBtn = document.querySelector('.faq-cat.active');
+    if (initBtn) {
+      slider.style.transition = 'none';
+      requestAnimationFrame(() => {
+        moveSlider(initBtn);
+        requestAnimationFrame(() => { slider.style.transition = ''; });
+      });
+    }
+
+    // Re-position on resize
+    window.addEventListener('resize', () => {
+      const active = document.querySelector('.faq-cat.active');
+      if (active) moveSlider(active);
+    });
 
     // ── Accordion open/close ──────────────────────────────────────
     items.forEach(det => {
@@ -539,6 +581,7 @@
       btn.addEventListener('click', () => {
         catButtons.forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
+        moveSlider(btn);
         activeCat = btn.dataset.cat;
         applyFilter();
       });
@@ -558,35 +601,31 @@
       items.forEach(det => {
         const cat = det.dataset.cat;
         const questionEl = det.querySelector('.faq-question');
-        const answerEl = det.querySelector('.faq-body-inner p');
-        const questionText = questionEl.dataset.original || questionEl.textContent;
-        const answerText = answerEl.dataset.original || answerEl.textContent;
+        const bodyEl = det.querySelector('.faq-body-inner');
 
-        // Store originals once
-        if (!questionEl.dataset.original) questionEl.dataset.original = questionEl.textContent;
-        if (!answerEl.dataset.original) answerEl.dataset.original = answerEl.textContent;
+        // Store original HTML once
+        if (!questionEl.dataset.originalHtml) questionEl.dataset.originalHtml = questionEl.innerHTML;
+        if (!bodyEl.dataset.originalHtml) bodyEl.dataset.originalHtml = bodyEl.innerHTML;
+
+        const questionText = questionEl.textContent.toLowerCase();
+        const answerText = bodyEl.textContent.toLowerCase();
 
         const matchesCat = activeCat === 'all' || cat === activeCat;
-        const matchesQuery = !query ||
-          questionText.toLowerCase().includes(query) ||
-          answerText.toLowerCase().includes(query);
+        const matchesQuery = !query || questionText.includes(query) || answerText.includes(query);
 
         if (matchesCat && matchesQuery) {
           det.style.display = '';
           visible++;
 
-          // Highlight matches
+          // Highlight matches in question only (body has rich HTML, safer to leave untouched)
           if (query) {
             const re = new RegExp(`(${escapeReg(query)})`, 'gi');
-            questionEl.innerHTML = questionEl.dataset.original.replace(re, '<mark>$1</mark>');
-            answerEl.innerHTML = answerEl.dataset.original.replace(re, '<mark>$1</mark>');
+            questionEl.innerHTML = questionEl.dataset.originalHtml.replace(re, '<mark>$1</mark>');
           } else {
-            questionEl.innerHTML = questionEl.dataset.original;
-            answerEl.innerHTML = answerEl.dataset.original;
+            questionEl.innerHTML = questionEl.dataset.originalHtml;
           }
         } else {
           det.style.display = 'none';
-          // Close if hidden
           if (det.classList.contains('is-open')) {
             const body = det.querySelector('.faq-body');
             det.classList.remove('is-open');
