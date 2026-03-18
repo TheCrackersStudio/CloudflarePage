@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>FAQ | Java & Stuff</title>
+  <link rel="stylesheet" href="../style.css" />
+  <style>
+    /* ── FAQ-specific styles (no changes to style.css) ── */
+
+    .faq-search-wrap {
+      position: relative;
+      margin-bottom: 24px;
+    }
+
+    .faq-search-icon {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--muted);
+      font-size: 16px;
+      pointer-events: none;
+    }
+
+    .faq-search {
+      width: 100%;
+      background: #1c1e22;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 13px 16px 13px 44px;
+      color: var(--text);
+      font-family: inherit;
+      font-size: 15px;
+      outline: none;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .faq-search::placeholder {
+      color: var(--muted);
+    }
+
+    .faq-search:focus {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px rgba(14, 135, 249, 0.15);
+    }
+
+    /* Category filter pills */
+    .faq-cats {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 24px;
+    }
+
+    .faq-cat {
+      padding: 6px 16px;
+      border-radius: 999px;
+      background: #1c1e22;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      user-select: none;
+    }
+
+    .faq-cat:hover {
+      border-color: #45455a;
+      color: var(--text);
+    }
+
+    .faq-cat.active {
+      background: rgba(14, 135, 249, 0.12);
+      border-color: var(--blue);
+      color: var(--blue);
+    }
+
+    /* No results state */
+    .faq-empty {
+      text-align: center;
+      padding: 48px 0;
+      color: var(--muted);
+      display: none;
+    }
+
+    .faq-empty-icon {
+      font-size: 40px;
+      margin-bottom: 12px;
+      opacity: 0.4;
+    }
+
+    .faq-empty p {
+      margin: 0;
+      font-size: 15px;
+    }
+
+    /* Enhanced details card */
+    details.faq-item {
+      background: #1e2025;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 0;
+      margin-bottom: 10px;
+      overflow: hidden;
+      transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.15s ease;
+    }
+
+    details.faq-item:hover {
+      border-color: #3a3a50;
+    }
+
+    details.faq-item.is-open {
+      border-color: rgba(14, 135, 249, 0.35);
+      box-shadow: 0 0 0 1px rgba(14, 135, 249, 0.08), 0 8px 24px rgba(0, 0, 0, 0.3);
+    }
+
+    details.faq-item > summary {
+      list-style: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 18px 20px;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    details.faq-item > summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .faq-question {
+      flex: 1;
+      font-weight: 600;
+      font-size: 15px;
+      color: var(--text);
+      line-height: 1.4;
+    }
+
+    /* Chevron arrow */
+    .faq-arrow {
+      flex-shrink: 0;
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      background: #2a2b32;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.25s ease, transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .faq-arrow svg {
+      width: 14px;
+      height: 14px;
+      stroke: var(--muted);
+      transition: stroke 0.25s ease;
+    }
+
+    details.faq-item.is-open .faq-arrow {
+      background: rgba(14, 135, 249, 0.12);
+      transform: rotate(180deg);
+    }
+
+    details.faq-item.is-open .faq-arrow svg {
+      stroke: var(--blue);
+    }
+
+    /* Answer body */
+    .faq-body {
+      overflow: hidden;
+      max-height: 0;
+      opacity: 0;
+      transition: max-height 0.45s cubic-bezier(0.4, 0, 0.2, 1),
+                  opacity 0.35s ease,
+                  padding 0.35s ease;
+    }
+
+    details.faq-item.is-open .faq-body {
+      opacity: 1;
+    }
+
+    .faq-body-inner {
+      padding: 16px 20px 20px;
+      color: var(--muted);
+      font-size: 14.5px;
+      line-height: 1.65;
+      border-top: 1px solid var(--border);
+      margin: 0 20px;
+      margin-bottom: 4px;
+    }
+
+    /* Markdown content styling */
+    .faq-body-inner p { margin: 0 0 10px; }
+    .faq-body-inner p:last-child { margin-bottom: 0; }
+
+    .faq-body-inner strong { color: var(--text); font-weight: 700; }
+    .faq-body-inner em { color: #c5c5d8; font-style: italic; }
+
+    .faq-body-inner a { color: #8bc7ff; text-decoration: none; }
+    .faq-body-inner a:hover { text-decoration: underline; }
+
+    .faq-body-inner code {
+      background: #14141a;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 2px 7px;
+      font-size: 13px;
+      font-family: 'JetBrains Mono', 'Fira Code', monospace;
+      color: #a8d8ff;
+    }
+
+    .faq-body-inner pre {
+      background: #14141a;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px 16px;
+      overflow-x: auto;
+      margin: 10px 0;
+    }
+
+    .faq-body-inner pre code {
+      background: none;
+      border: none;
+      padding: 0;
+      font-size: 13px;
+    }
+
+    .faq-body-inner ul, .faq-body-inner ol {
+      margin: 8px 0;
+      padding-left: 22px;
+    }
+
+    .faq-body-inner li { margin: 5px 0; }
+
+    .faq-body-inner blockquote {
+      border-left: 3px solid var(--blue);
+      margin: 10px 0;
+      padding: 8px 14px;
+      background: rgba(14, 135, 249, 0.06);
+      border-radius: 0 8px 8px 0;
+      color: #b0b0c8;
+    }
+
+    .faq-body-inner hr {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 14px 0;
+    }
+
+    .faq-body-inner h3, .faq-body-inner h4 {
+      color: var(--text);
+      margin: 12px 0 6px;
+      font-size: 14px;
+    }
+
+    /* Category tag on each item */
+    .faq-tag {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 9px;
+      border-radius: 999px;
+      background: #24242e;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    /* Search highlight */
+    mark {
+      background: rgba(14, 135, 249, 0.25);
+      color: #8bc7ff;
+      border-radius: 3px;
+      padding: 0 2px;
+    }
+
+    /* Result count */
+    .faq-count {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 16px;
+      height: 18px;
+    }
+
+    @media (max-width: 600px) {
+      .faq-tag { display: none; }
+      .faq-body-inner { padding-left: 20px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="container header-card" style="justify-content: space-between;">
+      <div>
+        <h1 class="title" style="margin: 0;">FAQ</h1>
+        <p class="desc" style="margin: 0.5rem 0 0; color: var(--muted);">Frequently asked questions about Java & Stuff.</p>
+      </div>
+    </div>
+  </header>
+
+  <main class="container" style="padding: 0 0 80px; text-align: left;">
+    <section style="max-width: 800px; margin: 0 auto;">
+
+      <!-- Search -->
+      <div class="faq-search-wrap">
+        <span class="faq-search-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        </span>
+        <input
+          class="faq-search"
+          type="text"
+          id="faqSearch"
+          placeholder="Search questions…"
+          autocomplete="off"
+          spellcheck="false"
+        />
+      </div>
+
+      <!-- Category filters -->
+      <div class="faq-cats" id="faqCats">
+        <button class="faq-cat active" data-cat="all">All</button>
+        <button class="faq-cat" data-cat="general">General</button>
+        <button class="faq-cat" data-cat="install">Install</button>
+        <button class="faq-cat" data-cat="compatibility">Compatibility</button>
+        <button class="faq-cat" data-cat="updates">Updates</button>
+        <button class="faq-cat" data-cat="community">Community</button>
+      </div>
+
+      <!-- Result count -->
+      <div class="faq-count" id="faqCount"></div>
+
+      <!-- FAQ Items -->
+      <div id="faqList">
+
+        <details class="faq-item" data-cat="general">
+          <summary>
+            <span class="faq-question">What is Java & Stuff?</span>
+            <span class="faq-tag">General</span>
+            <span class="faq-arrow"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>
+          </summary>
+          <div class="faq-body">
+            <div class="faq-body-inner">
+              <p>Java & Stuff is a curated modpack designed to recreate the <strong>Actions & Stuff</strong> experience on Minecraft Java Edition.</p>
+            </div>
+          </div>
+        </details>
+
+        <details class="faq-item" data-cat="install">
+          <summary>
+            <span class="faq-question">How do I install the modpack?</span>
+            <span class="faq-tag">Install</span>
+            <span class="faq-arrow"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>
+          </summary>
+          <div class="faq-body">
+            <div class="faq-body-inner">
+              <p>Download the latest version, then follow these steps:</p>
+              <ol>
+                <li>Install <strong>Fabric Loader</strong> for your Minecraft version.</li>
+                <li>Place the downloaded <code>.jar</code> files into your <code>mods/</code> folder.</li>
+                <li>Launch Minecraft using the Fabric profile.</li>
+              </ol>
+            </div>
+          </div>
+        </details>
+
+        <details class="faq-item" data-cat="compatibility">
+          <summary>
+            <span class="faq-question">Which Minecraft versions are supported?</span>
+            <span class="faq-tag">Compatibility</span>
+            <span class="faq-arrow"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>
+          </summary>
+          <div class="faq-body">
+            <div class="faq-body-inner">
+              <p>The modpack is currently tuned for the <strong>latest supported release</strong>. Check the <em>Versions</em> tab on the main page for the full compatibility matrix.</p>
+            </div>
+          </div>
+        </details>
+
+        <details class="faq-item" data-cat="compatibility">
+          <summary>
+            <span class="faq-question">Does this work with Fabric and Forge?</span>
+            <span class="faq-tag">Compatibility</span>
+            <span class="faq-arrow"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>
+          </summary>
+          <div class="faq-body">
+            <div class="faq-body-inner">
+              <p>It is built exclusively for <strong>Fabric</strong>. Some mods may have Forge equivalents, but compatibility is <em>not guaranteed</em> and is unsupported.</p>
+              <blockquote>If you're on Forge, consider looking for a Forge-native alternative modpack instead.</blockquote>
+            </div>
+          </div>
+        </details>
+
+        <details class="faq-item" data-cat="community">
+          <summary>
+            <span class="faq-question">Where can I report bugs?</span>
+            <span class="faq-tag">Community</span>
+            <span class="faq-arrow"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>
+          </summary>
+          <div class="faq-body">
+            <div class="faq-body-inner">
+              <p>You can report issues in two places:</p>
+              <ul>
+                <li><strong>Issue Tracker</strong> — for reproducible bugs with steps to reproduce.</li>
+                <li><strong>Community Discord</strong> — for general weirdness or quick questions (link on the main page).</li>
+              </ul>
+            </div>
+          </div>
+        </details>
+
+        <details class="faq-item" data-cat="compatibility">
+          <summary>
+            <span class="faq-question">Can I use this on a server?</span>
+            <span class="faq-tag">Compatibility</span>
+            <span class="faq-arrow"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>
+          </summary>
+          <div class="faq-body">
+            <div class="faq-body-inner">
+              <p>Server compatibility varies by mod. To run a server:</p>
+              <ul>
+                <li>Check each mod's page for a <em>server-side</em> tag.</li>
+                <li>Ensure the server runs the <strong>exact same mod versions</strong> as the client.</li>
+                <li>Client-only mods (e.g. shaders, HUD mods) can usually be omitted server-side.</li>
+              </ul>
+            </div>
+          </div>
+        </details>
+
+        <details class="faq-item" data-cat="updates">
+          <summary>
+            <span class="faq-question">How often is the pack updated?</span>
+            <span class="faq-tag">Updates</span>
+            <span class="faq-arrow"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>
+          </summary>
+          <div class="faq-body">
+            <div class="faq-body-inner">
+              <p>Updates are released as new versions of the modpack or its dependencies become available. There's no fixed schedule — follow the project on <strong>Modrinth</strong> or join the Discord to get notified.</p>
+            </div>
+          </div>
+        </details>
+
+        <details class="faq-item" data-cat="community">
+          <summary>
+            <span class="faq-question">Can I suggest a mod to include?</span>
+            <span class="faq-tag">Community</span>
+            <span class="faq-arrow"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>
+          </summary>
+          <div class="faq-body">
+            <div class="faq-body-inner">
+              <p>Yes! Suggestions are welcome via the community channels. When suggesting, it helps to include:</p>
+              <ul>
+                <li>The mod name and <strong>Modrinth/CurseForge link</strong>.</li>
+                <li>Why it fits the Actions & Stuff experience.</li>
+                <li>Whether it has a Fabric version.</li>
+              </ul>
+            </div>
+          </div>
+        </details>
+
+        <details class="faq-item" data-cat="general">
+          <summary>
+            <span class="faq-question">Why is the download page separate?</span>
+            <span class="faq-tag">General</span>
+            <span class="faq-arrow"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>
+          </summary>
+          <div class="faq-body">
+            <div class="faq-body-inner">
+              <p>The download page provides a simplified interface focused on picking a platform and starting the download — keeping it separate avoids cluttering the main project page.</p>
+            </div>
+          </div>
+        </details>
+
+        <details class="faq-item" data-cat="general">
+          <summary>
+            <span class="faq-question">Where can I find more information?</span>
+            <span class="faq-tag">General</span>
+            <span class="faq-arrow"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>
+          </summary>
+          <div class="faq-body">
+            <div class="faq-body-inner">
+              <p>Check these resources:</p>
+              <ul>
+                <li><strong>Main page</strong> — overview, screenshots, and version info.</li>
+                <li><strong>Project repository</strong> — full changelog and source.</li>
+                <li><strong>Discord</strong> — community discussion and announcements.</li>
+              </ul>
+            </div>
+          </div>
+        </details>
+
+      </div>
+
+      <!-- Empty state -->
+      <div class="faq-empty" id="faqEmpty">
+        <div class="faq-empty-icon">🔍</div>
+        <p>No questions match your search.</p>
+      </div>
+
+    </section>
+  </main>
+
+  <script>
+    const items = Array.from(document.querySelectorAll('.faq-item'));
+    const searchInput = document.getElementById('faqSearch');
+    const catButtons = document.querySelectorAll('.faq-cat');
+    const emptyState = document.getElementById('faqEmpty');
+    const countEl = document.getElementById('faqCount');
+    let activeCat = 'all';
+
+    // ── Accordion open/close ──────────────────────────────────────
+    items.forEach(det => {
+      const body = det.querySelector('.faq-body');
+      det.removeAttribute('open');
+
+      det.querySelector('summary').addEventListener('click', e => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        const isOpen = det.classList.contains('is-open');
+
+        if (!isOpen) {
+          det.setAttribute('open', '');
+          det.classList.add('is-open');
+          body.style.maxHeight = body.scrollHeight + 'px';
+          body.style.opacity = '1';
+        } else {
+          det.classList.remove('is-open');
+          body.style.maxHeight = '0px';
+          body.style.opacity = '0';
+          setTimeout(() => det.removeAttribute('open'), 450);
+        }
+      });
+    });
+
+    // ── Category filter ───────────────────────────────────────────
+    catButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        catButtons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        activeCat = btn.dataset.cat;
+        applyFilter();
+      });
+    });
+
+    // ── Search ────────────────────────────────────────────────────
+    searchInput.addEventListener('input', applyFilter);
+
+    function escapeReg(str) {
+      return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    }
+
+    function applyFilter() {
+      const query = searchInput.value.trim().toLowerCase();
+      let visible = 0;
+
+      items.forEach(det => {
+        const cat = det.dataset.cat;
+        const questionEl = det.querySelector('.faq-question');
+        const answerEl = det.querySelector('.faq-body-inner p');
+        const questionText = questionEl.dataset.original || questionEl.textContent;
+        const answerText = answerEl.dataset.original || answerEl.textContent;
+
+        // Store originals once
+        if (!questionEl.dataset.original) questionEl.dataset.original = questionEl.textContent;
+        if (!answerEl.dataset.original) answerEl.dataset.original = answerEl.textContent;
+
+        const matchesCat = activeCat === 'all' || cat === activeCat;
+        const matchesQuery = !query ||
+          questionText.toLowerCase().includes(query) ||
+          answerText.toLowerCase().includes(query);
+
+        if (matchesCat && matchesQuery) {
+          det.style.display = '';
+          visible++;
+
+          // Highlight matches
+          if (query) {
+            const re = new RegExp(`(${escapeReg(query)})`, 'gi');
+            questionEl.innerHTML = questionEl.dataset.original.replace(re, '<mark>$1</mark>');
+            answerEl.innerHTML = answerEl.dataset.original.replace(re, '<mark>$1</mark>');
+          } else {
+            questionEl.innerHTML = questionEl.dataset.original;
+            answerEl.innerHTML = answerEl.dataset.original;
+          }
+        } else {
+          det.style.display = 'none';
+          // Close if hidden
+          if (det.classList.contains('is-open')) {
+            const body = det.querySelector('.faq-body');
+            det.classList.remove('is-open');
+            body.style.maxHeight = '0';
+            body.style.opacity = '0';
+            det.removeAttribute('open');
+          }
+        }
+      });
+
+      emptyState.style.display = visible === 0 ? 'block' : 'none';
+      countEl.textContent = query || activeCat !== 'all'
+        ? `${visible} result${visible !== 1 ? 's' : ''}`
+        : '';
+    }
+  </script>
+</body>
+</html>
