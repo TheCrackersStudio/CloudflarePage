@@ -34,6 +34,16 @@
   <meta name="twitter:image" content="https://www.javanstuff.ir/discordembed.png">
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.9.6/lottie.min.js"></script>
+
+  <style>
+    /* Custom Cursors */
+    * {
+      cursor: url('cursors/customcursor.png'), auto;
+    }
+    a, button, [role="button"], .tab, .dlbtn-ver, input[type="submit"], input[type="button"], [onclick], .clickable, .gallery-img, details > summary {
+      cursor: url('cursors/customcursor_hand_grab.png'), grab;
+    }
+  </style>
 </head>
 <body>
 
@@ -308,12 +318,14 @@
             det.classList.add("is-open");
             det.setAttribute("open", "");
             
-            // Force reflow to ensure transition happens
-            void wrapper.offsetHeight;
-            
-            const scrollHeight = wrapper.scrollHeight;
-            wrapper.style.maxHeight = scrollHeight + "px";
-            wrapper.style.opacity = "1";
+            // Double requestAnimationFrame ensures layout is complete before measuring
+            requestAnimationFrame(() => {
+              requestAnimationFrame(() => {
+                const scrollHeight = wrapper.scrollHeight;
+                wrapper.style.maxHeight = scrollHeight + "px";
+                wrapper.style.opacity = "1";
+              });
+            });
           } else {
             // Closing animation
             det.classList.remove("is-open");
@@ -797,6 +809,7 @@
         await sleep(1000);
       }
       splash.classList.add("hidden");
+      document.body.style.overflow = "auto";
     }
 
     bootApp();
