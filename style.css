@@ -48,6 +48,11 @@ body {
   -ms-user-select: none;
 }
 
+/* Prevent scrolling while splash screen is visible */
+body:has(#splash:not(.hidden)) {
+  overflow: hidden;
+}
+
 /* Hyperlinks */
 a {
   color: #8bc7ff;
@@ -695,6 +700,18 @@ section {
 }
 
 /* ==================================== */
+/* Custom Cursor Support              */
+/* ==================================== */
+
+/* Custom cursor can be set via --cursor-url CSS variable */
+/* Example: style="--cursor-url: url('cursors/my-cursor.cur')" */
+
+/* Default cursor styling */
+* {
+  cursor: var(--cursor-url, auto);
+}
+
+/* ==================================== */
 /* Collapsible Details/Summary          */
 /* ==================================== */
 
@@ -912,10 +929,11 @@ details.is-open .details-wrapper {
 /* ===== HEADER GRID ===== */
 .header-card {
   display: grid;
-  grid-template-columns: 100px 1fr;
-  grid-template-areas: "icon title" "icon desc";
-  column-gap: 14px;
+  grid-template-columns: 100px 1fr 50px;
+  grid-template-areas: "icon title download" "icon desc desc";
+  column-gap: 12px;
   row-gap: 10px;
+  align-items: start;
 }
 
 /* 🔑 FLATTEN WRAPPER */
@@ -937,6 +955,7 @@ details.is-open .details-wrapper {
   margin: 0;
   font-size: 1.15rem;
   line-height: 1.2;
+  word-break: break-word;
 }
 
 /* ===== DESCRIPTION + STATS ===== */
@@ -964,34 +983,33 @@ details.is-open .details-wrapper {
 
 /* ===== DOWNLOAD BUTTON ===== */
 .actions {
-    grid-area: auto;
+    grid-area: download;
     display: flex;
-    justify-content: flex-start;
-    margin: 10px 0 20px 0;
-    width: 100%;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    width: auto;
+    height: 50px;
   }
 
   #download-btn {
-    width: auto;
-    height: auto;
-    border-radius: 12px;
-    padding: 12px 20px;
-    justify-self: flex-start;
+    width: 47px;
+    height: 47px;
+    border-radius: 50%;
+    padding: 0;
     display: flex;
     align-items: center;
     justify-content: center;
     background: var(--blue);
+    transform-origin: center;
   }
 
   #download-btn:active {
-    transform: scale(0.95) !important;
+    transform: scale(0.90) !important;
   }
 
   #download-btn span {
-    display: inline-block;
-    margin-left: 8px;
-    font-size: 14px;
-    font-weight: 700;
+    display: none;
   }
 
   #lottiedl {
@@ -1012,7 +1030,7 @@ details.is-open .details-wrapper {
   .tabs {
     display: flex;
     align-items: center;
-    justify-content: flex-start;
+    justify-content: center;
     margin: 0 auto 20px auto;
     width: 100%;
     overflow-x: auto;
