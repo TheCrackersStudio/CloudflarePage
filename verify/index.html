@@ -154,7 +154,125 @@
                 loadingSpinner.style.display = 'block';
                 responseMessage.style.display = 'none';
             });
+
+            // Context menu handling
+            const contextMenu = document.getElementById('context-menu');
+            
+            if (contextMenu) {
+              function showContextMenu(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                contextMenu.classList.remove('hide');
+                contextMenu.style.display = 'block';
+                
+                contextMenu.style.position = 'fixed';
+                contextMenu.style.left = e.pageX + 'px';
+                contextMenu.style.top = e.pageY + 'px';
+                
+                contextMenu.classList.add('show');
+                
+                setTimeout(function() {
+                  const rect = contextMenu.getBoundingClientRect();
+                  if (rect.right > window.innerWidth) {
+                    contextMenu.style.left = (e.pageX - rect.width) + 'px';
+                  }
+                  if (rect.bottom > window.innerHeight) {
+                    contextMenu.style.top = (e.pageY - rect.height) + 'px';
+                  }
+                }, 0);
+              }
+              
+              function hideContextMenu() {
+                contextMenu.classList.remove('show');
+                contextMenu.classList.add('hide');
+                
+                setTimeout(function() {
+                  contextMenu.classList.remove('hide');
+                  contextMenu.style.display = 'none';
+                }, 200);
+              }
+              
+              window.addEventListener('contextmenu', showContextMenu, false);
+              
+              window.addEventListener('click', function(e) {
+                if (contextMenu.classList.contains('show') && e.target.closest('.context-menu') === null) {
+                  hideContextMenu();
+                }
+              }, false);
+              
+              window.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && contextMenu.classList.contains('show')) {
+                  hideContextMenu();
+                }
+              });
+              
+              contextMenu.addEventListener('click', function(e) {
+                e.preventDefault();
+                const button = e.target.closest('.context-menu-item');
+                if (!button) return;
+                
+                const action = button.getAttribute('data-action');
+                
+                switch(action) {
+                  case 'back':
+                    window.history.back();
+                    break;
+                  case 'forward':
+                    window.history.forward();
+                    break;
+                  case 'reload':
+                    window.location.reload();
+                    break;
+                  case 'nav-home':
+                    window.location.href = '/';
+                    break;
+                  case 'nav-discord':
+                    window.location.href = '/discord/';
+                    break;
+                  case 'nav-download':
+                    window.location.href = '/download/';
+                    break;
+                  case 'nav-faq':
+                    window.location.href = '/FAQ/';
+                    break;
+                }
+                
+                hideContextMenu();
+              });
+            }
         });
     </script>
-</body>
-</html>
+
+    <!-- Custom Context Menu -->
+    <div id="context-menu" class="context-menu" role="menu" aria-hidden="true">
+      <button class="context-menu-item" data-action="back" aria-label="Back">
+        <i class="bi bi-arrow-left"></i>
+        <span>Back</span>
+      </button>
+      <button class="context-menu-item" data-action="forward" aria-label="Forward">
+        <i class="bi bi-arrow-right"></i>
+        <span>Forward</span>
+      </button>
+      <button class="context-menu-item" data-action="reload" aria-label="Reload">
+        <i class="bi bi-arrow-clockwise"></i>
+        <span>Reload</span>
+      </button>
+      <hr class="context-menu-divider">
+      <button class="context-menu-item" data-action="nav-home" aria-label="Home">
+        <i class="bi bi-house"></i>
+        <span>Home</span>
+      </button>
+      <button class="context-menu-item" data-action="nav-discord" aria-label="Discord">
+        <i class="bi bi-discord"></i>
+        <span>Discord</span>
+      </button>
+      <button class="context-menu-item" data-action="nav-download" aria-label="Download">
+        <i class="bi bi-download"></i>
+        <span>Download</span>
+      </button>
+      <button class="context-menu-item" data-action="nav-faq" aria-label="FAQ">
+        <i class="bi bi-question-circle"></i>
+        <span>FAQ</span>
+      </button>
+    </div>
