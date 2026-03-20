@@ -46,6 +46,100 @@
     .dropdown-card { background-color: rgb(40, 41, 46); border: 1px solid #2e2e3b; }
     .bg-blue { background-color: #0e87f9; }
     [x-cloak] { display: none !important; }
+
+    /* Context Menu Styles */
+    .context-menu {
+      position: fixed;
+      display: none;
+      background: rgb(40, 41, 46);
+      border: 1px solid #2e2e3b;
+      border-radius: 12px;
+      padding: 8px 0;
+      min-width: 180px;
+      z-index: 10000;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(10px);
+      margin: 0;
+      list-style: none;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .context-menu.show {
+      display: block;
+      pointer-events: auto;
+      animation: fadeIn 0.25s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    }
+
+    .context-menu.hide {
+      animation: fadeOut 0.2s ease-out forwards;
+      pointer-events: none;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: scale(0.92);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    @keyframes fadeOut {
+      from {
+        opacity: 1;
+        transform: scale(1);
+      }
+      to {
+        opacity: 0;
+        transform: scale(0.92);
+      }
+    }
+
+    .context-menu-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+      padding: 10px 14px;
+      background: none;
+      border: none;
+      color: #e7e7ee;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.1s ease;
+      text-align: left;
+      font-family: inherit;
+      user-select: none;
+    }
+
+    .context-menu-item:hover {
+      background: #16161c;
+      color: #0e87f9;
+    }
+
+    .context-menu-item:active {
+      background: rgba(14, 135, 249, 0.2);
+    }
+
+    .context-menu-item i {
+      width: 18px;
+      height: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+    }
+
+    .context-menu-divider {
+      height: 1px;
+      background: #2e2e3b;
+      margin: 6px 0;
+      border: none;
+    }
   </style>
 </head>
 <body class="flex items-center justify-center min-h-screen p-6">
@@ -306,7 +400,131 @@ document.addEventListener('alpine:init', () => {
     }
   }));
 });
+
+// Wait for DOM to be ready before setting up context menu
+document.addEventListener('DOMContentLoaded', function() {
+  // Global context menu handling
+  const contextMenu = document.getElementById('context-menu');
+  
+  if (!contextMenu) return;
+  
+  function showContextMenu(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    // Reset animation states
+    contextMenu.classList.remove('hide');
+    contextMenu.style.display = 'block';
+    
+    contextMenu.style.position = 'fixed';
+    contextMenu.style.left = e.pageX + 'px';
+    contextMenu.style.top = e.pageY + 'px';
+    
+    // Trigger fade in animation
+    contextMenu.classList.add('show');
+    
+    // Adjust if off-screen
+    setTimeout(function() {
+      const rect = contextMenu.getBoundingClientRect();
+      if (rect.right > window.innerWidth) {
+        contextMenu.style.left = (e.pageX - rect.width) + 'px';
+      }
+      if (rect.bottom > window.innerHeight) {
+        contextMenu.style.top = (e.pageY - rect.height) + 'px';
+      }
+    }, 0);
+  }
+  
+  function hideContextMenu() {
+    contextMenu.classList.remove('show');
+    contextMenu.classList.add('hide');
+    
+    // Remove classes and hide after animation completes
+    setTimeout(function() {
+      contextMenu.classList.remove('hide');
+      contextMenu.style.display = 'none';
+    }, 200);
+  }
+  
+  // Show menu on right-click
+  window.addEventListener('contextmenu', showContextMenu, false);
+  
+  // Hide menu on left click or elsewhere
+  window.addEventListener('click', function(e) {
+    if (contextMenu.classList.contains('show') && e.target.closest('.context-menu') === null) {
+      hideContextMenu();
+    }
+  }, false);
+  
+  // Hide on Escape
+  window.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && contextMenu.classList.contains('show')) {
+      hideContextMenu();
+    }
+  });
+  
+  // Handle menu item clicks
+  contextMenu.addEventListener('click', function(e) {
+    e.preventDefault();
+    const button = e.target.closest('.context-menu-item');
+    if (!button) return;
+    
+    const action = button.getAttribute('data-action');
+    
+    switch(action) {
+      case 'back':
+        window.history.back();
+        break;
+      case 'forward':
+        window.history.forward();
+        break;
+      case 'reload':
+        window.location.reload();
+        break;
+      case 'nav-home':
+        window.location.href = '/';
+        break;
+      case 'nav-discord':
+        window.location.href = '/discord/';
+        break;
+      case 'nav-faq':
+        window.location.href = '/FAQ/';
+        break;
+    }
+    
+    hideContextMenu();
+  });
+});
 </script>
+
+<!-- Custom Context Menu -->
+<div id="context-menu" class="context-menu" role="menu" aria-hidden="true">
+  <button class="context-menu-item" data-action="back" aria-label="Back">
+    <i class="bi bi-arrow-left"></i>
+    <span>Back</span>
+  </button>
+  <button class="context-menu-item" data-action="forward" aria-label="Forward">
+    <i class="bi bi-arrow-right"></i>
+    <span>Forward</span>
+  </button>
+  <button class="context-menu-item" data-action="reload" aria-label="Reload">
+    <i class="bi bi-arrow-clockwise"></i>
+    <span>Reload</span>
+  </button>
+  <hr class="context-menu-divider">
+  <button class="context-menu-item" data-action="nav-home" aria-label="Home">
+    <i class="bi bi-house"></i>
+    <span>Home</span>
+  </button>
+  <button class="context-menu-item" data-action="nav-discord" aria-label="Discord">
+    <i class="bi bi-discord"></i>
+    <span>Discord</span>
+  </button>
+  <button class="context-menu-item" data-action="nav-faq" aria-label="FAQ">
+    <i class="bi bi-question-circle"></i>
+    <span>FAQ</span>
+  </button>
+</div>
 
 </body>
 </html>
