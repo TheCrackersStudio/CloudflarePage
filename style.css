@@ -48,9 +48,39 @@ body {
   -ms-user-select: none;
 }
 
+/* Smooth scrolling behavior */
+html {
+  scroll-behavior: smooth;
+}
+
 /* Prevent scrolling while splash screen is visible */
 body:has(#splash:not(.hidden)) {
   overflow: hidden;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: #555;
+  border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #777;
+}
+
+/* Firefox scrollbar */
+html {
+  scrollbar-color: #555 var(--bg);
+  scrollbar-width: thin;
+  scroll-behavior: smooth;
 }
 
 /* Hyperlinks */
@@ -726,6 +756,103 @@ details {
   transition: all 0.3s ease;
 }
 
+/* Animated details dropdown with scrollable content */
+details.animated-details {
+  overflow: visible;
+}
+
+details.animated-details .details-inner {
+  max-height: 600px;
+  overflow: hidden;
+  transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.5s ease-out;
+  opacity: 1;
+  animation: contentFadeIn 0.5s ease-out;
+}
+
+details.animated-details:not(.is-open) .details-inner {
+  max-height: 0px;
+  opacity: 0;
+  transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.35s ease-out;
+}
+
+details.animated-details.closing .details-inner {
+  animation: contentFadeOut 0.35s ease-out forwards;
+}
+
+details.animated-details .details-content {
+  max-height: 100%;
+}
+
+details.animated-details ul {
+  margin: 0;
+  padding-left: 1.5rem;
+}
+
+/* Stagger animation for list items - opening */
+details.animated-details[open] ul li {
+  animation: itemSlideIn 0.4s ease-out backwards;
+}
+
+/* Stagger animation for list items - closing */
+details.animated-details.closing ul li {
+  animation: itemSlideOut 0.35s ease-in forwards;
+}
+
+/* Opening delays */
+details.animated-details[open] ul li:nth-child(1) { animation-delay: 0.05s; }
+details.animated-details[open] ul li:nth-child(2) { animation-delay: 0.1s; }
+details.animated-details[open] ul li:nth-child(3) { animation-delay: 0.15s; }
+details.animated-details[open] ul li:nth-child(4) { animation-delay: 0.2s; }
+details.animated-details[open] ul li:nth-child(5) { animation-delay: 0.25s; }
+details.animated-details[open] ul li:nth-child(n+6) { animation-delay: 0.3s; }
+
+/* Closing delays - reversed and shorter */
+details.animated-details.closing ul li:nth-child(1) { animation-delay: 0s; }
+details.animated-details.closing ul li:nth-child(2) { animation-delay: 0.015s; }
+details.animated-details.closing ul li:nth-child(3) { animation-delay: 0.03s; }
+details.animated-details.closing ul li:nth-child(4) { animation-delay: 0.045s; }
+details.animated-details.closing ul li:nth-child(5) { animation-delay: 0.06s; }
+
+@keyframes contentFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes contentFadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes itemSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes itemSlideOut {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+}
+
 /* Summary element (the clickable title) */
 details > summary {
   list-style: none; /* Remove default marker */
@@ -734,6 +861,13 @@ details > summary {
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  margin: -0.75rem -1rem 0 -1rem;
+}
+
+details.animated-details > summary {
+  padding: 0;
+  margin: 0;
 }
 
 details > summary::-webkit-details-marker {
