@@ -1,331 +1,991 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Java & Stuff - 404</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
-<meta name="description" content="This page doesn't exist. Head back to Java & Stuff — hand-picked mods to replicate Actions & Stuff on Minecraft Java Edition.">
-<meta name="robots" content="noindex, nofollow">
-<meta name="author" content="TheCrackersStudio">
+  <title>Java & Stuff - Actions & Stuff For Minecraft Java Edition</title>
+  <meta name="description" content="Hand-Picked mods to best replicate Actions & Stuff on Minecraft Java Edition. A curated modpack focused on animations, immersion, and enhanced gameplay.">
+  <meta name="keywords" content="Minecraft, Minecraft Java, MC, Minecraft Mods, Minecraft Modpack, Actions and Stuff, Actions & Stuff, Minecraft Animations, Java Edition Modpack, Immersive Minecraft, Fabric Mods">
+  <meta name="robots" content="index, follow">
+  <meta name="author" content="TheCrackersStudio">
 
-<meta property="og:type" content="website">
-<meta property="og:title" content="404 — Page Not Found | Java & Stuff">
-<meta property="og:description" content="This page doesn't exist. Head back to Java & Stuff — hand-picked mods to replicate Actions & Stuff on Minecraft Java Edition.">
-<meta property="og:url" content="https://www.javanstuff.ir">
-<meta property="og:image" content="https://www.javanstuff.ir/discordembed.png">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
 
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="404 — Page Not Found | Java & Stuff">
-<meta name="twitter:description" content="This page doesn't exist. Head back to Java & Stuff — hand-picked mods to replicate Actions & Stuff on Minecraft Java Edition.">
-<meta name="twitter:image" content="https://www.javanstuff.ir/discordembed.png">
+  <link rel="icon" type="image/png" href="favicon-96x96.png" sizes="96x96" />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <link rel="shortcut icon" href="favicon.ico" />
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
+  <link rel="manifest" href="site.webmanifest" />
 
-<link rel="icon" type="image/png" href="favicon-96x96.png" sizes="96x96" />
-<link rel="icon" type="image/svg+xml" href="favicon.svg" />
-<link rel="shortcut icon" href="favicon.ico" />
-<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
-<link rel="manifest" href="site.webmanifest" />
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="theme-color" content="#fcfc37">
 
-<style>
-  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Actions & Stuff – Actions & Stuff For Minecraft Java Edition">
+  <meta property="og:description" content="Hand-Picked mods to best replicate Actions & Stuff on Java Edition. Focused on animations, immersion, and smooth gameplay.">
+  <meta property="og:url" content="https://www.javanstuff.ir">
+  <meta property="og:image" content="https://www.javanstuff.ir/discordembed.png">
 
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Actions & Stuff – Actions & Stuff For Minecraft Java Edition">
+  <meta name="twitter:description" content="Hand-Picked mods to best replicate Actions & Stuff on Minecraft Java Edition.">
+  <meta name="twitter:image" content="https://www.javanstuff.ir/discordembed.png">
 
-  :root {
-    --bg: rgb(22, 24, 28);
-    --panel: rgb(40, 41, 46);
-    --border: #2e2e3b;
-    --text: #e7e7ee;
-    --muted: #a0a0b2;
-    --blue: #0e87f9;
-    --blue-2: #0e7de4;
-    --radius: 14px;
-  }
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.9.6/lottie.min.js"></script>
 
-  html, body {
-    margin: 0;
-    background: var(--bg);
-    color: var(--text);
-    font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    user-select: none;
-    -webkit-user-select: none;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    overflow-x: hidden;
-  }
-
-  a { color: #8bc7ff; text-decoration: none; }
-
-  /* ── Main layout ── */
-  .error-container {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 60px 20px;
-    position: relative;
-    z-index: 1;
-  }
-
-  .error-content {
-    text-align: center;
-    max-width: 580px;
-  }
-
-  /* ── Animated 404 ── */
-  .error-code-wrap {
-    position: relative;
-    display: inline-block;
-    margin-bottom: 16px;
-  }
-
-  .error-code-wrap::after {
-    content: '404';
-    position: absolute;
-    inset: 0;
-    font-size: 120px;
-    font-weight: 800;
-    line-height: 1;
-    background: linear-gradient(135deg, var(--blue), var(--blue-2));
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    filter: blur(26px) opacity(0.5);
-    animation: glowPulse 3s ease-in-out infinite;
-    pointer-events: none;
-    z-index: 0;
-  }
-
-  @keyframes glowPulse {
-    0%, 100% { filter: blur(26px) opacity(0.38); }
-    50%       { filter: blur(38px) opacity(0.65); }
-  }
-
-  .error-code {
-    font-size: 120px;
-    font-weight: 800;
-    line-height: 1;
-    display: flex;
-    justify-content: center;
-    position: relative;
-    z-index: 1;
-  }
-
-  .error-code .d {
-    display: inline-block;
-    background: linear-gradient(160deg, #5db8ff 0%, var(--blue) 45%, var(--blue-2) 100%);
-    background-size: 200% 200%;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    animation: digitBounce 2.6s ease-in-out infinite, gradientShift 4s ease infinite;
-  }
-  .error-code .d:nth-child(1) { animation-delay: 0s,    0s; }
-  .error-code .d:nth-child(2) { animation-delay: 0.13s, 0.5s; }
-  .error-code .d:nth-child(3) { animation-delay: 0.26s, 1s; }
-
-  @keyframes digitBounce {
-    0%, 100% { transform: translateY(0px)  scaleY(1); }
-    40%       { transform: translateY(-18px) scaleY(1.04); }
-    55%       { transform: translateY(5px)   scaleY(0.97); }
-    70%       { transform: translateY(-7px)  scaleY(1.01); }
-    85%       { transform: translateY(2px)   scaleY(0.99); }
-  }
-
-  @keyframes gradientShift {
-    0%   { background-position: 0%   50%; }
-    50%  { background-position: 100% 50%; }
-    100% { background-position: 0%   50%; }
-  }
-
-  .error-title {
-    font-size: 32px;
-    font-weight: 700;
-    margin-bottom: 12px;
-    color: var(--text);
-  }
-
-  .error-message {
-    font-size: 16px;
-    color: var(--muted);
-    margin-bottom: 32px;
-    line-height: 1.6;
-    min-height: 52px;
-    opacity: 1;
-    transition: opacity 0.3s ease;
-  }
-
-  .error-message.fade-out { opacity: 0; }
-
-  .error-actions {
-    display: flex;
-    gap: 12px;
-    justify-content: center;
-    flex-wrap: wrap;
-  }
-
-  .btn {
-    padding: 14px 32px;
-    border-radius: var(--radius);
-    font-weight: 600;
-    font-size: 15px;
-    cursor: pointer;
-    border: none;
-    transition: all 0.3s ease;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    text-decoration: none;
-  }
-
-  .btn-primary { background: var(--blue); color: #fff; }
-  .btn-primary:hover { background: var(--blue-2); transform: translateY(-2px); }
-  .btn-primary:active { transform: translateY(0); }
-
-  .btn-secondary {
-    background: var(--panel);
-    color: var(--text);
-    border: 1px solid var(--border);
-  }
-  .btn-secondary:hover {
-    background: rgba(14, 135, 249, 0.1);
-    border-color: var(--blue);
-    color: var(--blue);
-  }
-  .btn-secondary:active { transform: scale(0.98); }
-
-  /* ── Footer ── */
-  .footer {
-    position: relative;
-    z-index: 1;
-    padding: 40px 0;
-    border-top: 1px solid var(--border);
-    background: var(--panel);
-    color: var(--muted);
-    text-align: center;
-  }
-
-  .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; width: 100%; }
-
-  .footer-links {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    margin-bottom: 20px;
-  }
-
-  .footer-links a {
-    color: var(--muted);
-    font-size: 24px;
-    transition: color 0.2s, transform 0.2s, filter 0.2s;
-  }
-
-  .footer-links a:hover {
-    color: var(--blue);
-    transform: translateY(-3px);
-    filter: drop-shadow(0 0 10px var(--blue-2));
-  }
-
-  .footer-links a i {
-    font-size: 24px;
-    display: inline-block;
-    transition: color 0.2s, transform 0.2s, filter 0.2s;
-  }
-
-  .footer-content p { margin: 4px 0; font-size: 14px; }
-
-  /* Custom Cursors */
-  * { cursor: url('cursors/customcursor.png'), auto; }
-  a, button, [role="button"] { cursor: url('cursors/customcursor_hand_grab.png'), grab; }
-
-  /* Mobile */
-  @media (max-width: 768px) {
-    .error-code, .error-code-wrap::after { font-size: 80px; }
-    .error-title { font-size: 24px; }
-    .error-message { font-size: 15px; }
-    .error-actions { flex-direction: column; }
-    .btn { width: 100%; justify-content: center; }
-  }
-</style>
+  <style>
+    /* Custom Cursors */
+    * {
+      cursor: url('cursors/customcursor.png'), auto;
+    }
+    a, button, [role="button"], .tab, .dlbtn-ver, input[type="submit"], input[type="button"], [onclick], .clickable, .gallery-img, details > summary {
+      cursor: url('cursors/customcursor_hand_grab.png'), grab;
+    }
+  </style>
 </head>
 <body>
 
-<main class="error-container">
-  <div class="error-content">
-    <div class="error-code-wrap">
-      <div class="error-code" aria-label="404">
-        <span class="d">4</span><span class="d">0</span><span class="d">4</span>
+<div id="splash">
+  <div class="splash-inner">
+    <img src="logo.png" alt="Java & Stuff" />
+    <div id="splash-lottie"></div>
+    <div id="splash-status">Starting…</div>
+  </div>
+</div>
+
+  <header class="header">
+    <div class="container header-card">
+      <img class="project-icon" src="https://thecrackersstudio.github.io/LTOBPDB/Elements/Java&Stuff.png">
+      <div class="project-main">
+        <div class="title-desc">
+          <h1 class="title">Java & Stuff</h1>
+          <div id="desc-title" class="desc markdown">
+            <p>Hand-Picked mods to Best replicate "Actions & Stuff" on Java</p>  
+            <p class="dlstats" style="color: #a0a0b2;"><img style="width: 25px; display: inline-block; transform: translateY(5px);" class="dlstats" src="dl.svg"> <span class="muted" id="download-count">—</span></p>
+          </div>
+        </div>
+        <div class="actions">
+          <button class="btn-primary" id="download-btn">
+            <svg xmlns="http://www.w3.org/2000/svg" id="lottiedl" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" class="h-6 w-6" style="width: 20px; height: 20px; display: inline-block; vertical-align: middle;"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3v-1m-4-4-4 4m0 0-4-4m4 4V4"></path></svg>
+            <span style="vertical-align: middle;">Download</span>
+          </button>
+        </div>
       </div>
     </div>
-    <h2 class="error-title">Page Not Found</h2>
-    <p class="error-message" id="error-message"></p>
-    <div class="error-actions">
-      <a href="/" class="btn btn-primary">
-        <span>↖</span> Return Home
-      </a>
-      <a href="/discord" class="btn btn-secondary">
-        Join Discord
-      </a>
+  </header>
+
+  <main class="container main">
+    <section>
+      <div class="tabs">
+        <div class="tab-slider"></div>
+        <button class="tab active" data-tab="desc">Description</button>
+        <button class="tab" data-tab="gallery">Gallery</button>
+        <button class="tab" data-tab="versions">Versions</button>
+      </div>
+
+      <div class="tab-panel active" id="desc">
+        <div id="desc-content" class="desc markdown"></div> </div>
+
+      <div class="tab-panel" id="gallery">
+        <div class="gallery" id="gallery-list"></div> </div>
+
+      <div class="tab-panel" id="versions">
+        <div class="versions-wrap" id="versions-list"></div> </div>
+    </section>
+
+    <aside class="sidebar">
+      <div class="card">
+        <h3>Compatibility</h3>
+        <div>Minecraft: Java Edition</div>
+        <div class="badge ver">1.21.8</div>
+      </div>
+
+      <div class="card">
+        <h3>Creators</h3>
+
+        <div class="creator">
+          <div class="avatar"><img style="border-radius: 50%;" width="40" src="https://thecrackersstudio.github.io/LTOBPDB/Elements/PFP/Denji.webp"></div>
+          <div>
+            <div>ItsDenji</div>
+            <div class="role">Owner</div>
+          </div>
+        </div>
+
+        <div class="creator">
+          <div class="avatar"><img style="border-radius: 50%;" width="40" src="https://thecrackersstudio.github.io/LTOBPDB/Elements/PFP/Chlem.webp"></div>
+          <div>
+            <div>Chlem</div>
+            <div class="role">Team</div>
+          </div>
+        </div>
+
+        <div class="creator">
+          <div class="avatar"><img style="border-radius: 50%;" width="40" src="https://thecrackersstudio.github.io/LTOBPDB/Elements/PFP/Agent.webp"></div>
+          <div>
+            <div>Agent</div>
+            <div class="role">Team</div>
+          </div>
+        </div>
+
+        <div class="creator">
+          <div class="avatar"><img style="border-radius: 50%;" width="40" src="https://thecrackersstudio.github.io/LTOBPDB/Elements/PFP/Sythan.webp"></div>
+          <div>
+            <div>Sythan</div>
+            <div class="role">Beta Tester</div>
+          </div>
+        </div>
+
+        <hr style="color:#2e2e3b;height: 1px;">
+
+        <h3 style="margin-top: 5px;">Special Thanks</h3>
+        <div class="creator">
+          <div class="avatar"><img style="border-radius: 50%;" width="40" src="https://thecrackersstudio.github.io/LTOBPDB/Elements/PFP/Nuzflamev.png"></div>
+          <div>
+            <div>NuzFlameV2</div>
+          </div>
+        </div>
+
+        <div class="creator">
+          <div class="avatar"><img style="border-radius: 50%;" width="40" src="https://cdn.discordapp.com/avatars/1084149244904079451/5219740c05a24b6e8411d68e23e6af0e.png?size=1024"></div>
+          <div>
+            <div>!goopi</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Details</h3>
+        <div>License: <strong>ARR</strong></div>
+        <div>Published: June 10, 2025</div>
+      </div>
+    </aside>
+  </main>
+
+    <footer class="footer">
+    <div class="container">
+      <div class="footer-links">
+        <a href="/discord/" target="_blank" title="Discord"><i class="bi bi-discord"></i></a>
+        <a href="https://x.com/DenjisWorkspace" target="_blank" title="X (Twitter)"><i class="bi bi-twitter-x"></i></a>
+      </div>
+      <div class="footer-content">
+        <p>Developed by TheCrackersStudio</p>
+        <p>Built for the Minecraft Community.</p>
+      </div>
+    </div>
+  </footer>
+  
+
+  <div id="lightbox" class="lightbox">
+    <div class="lightbox-controls">
+      <button class="lightbox-btn" id="lt-close" title="Close"><i class="bi bi-x-lg"></i></button>
+      <button class="lightbox-btn" id="lt-open-link" title="Open in new tab"><i class="bi bi-box-arrow-up-right"></i></button>
+      <button class="lightbox-btn" id="lt-fullscreen" title="Fullscreen"><i class="bi bi-arrows-fullscreen"></i></button>
+      <div class="lightbox-divider"></div>
+      <button class="lightbox-btn" id="lt-prev" title="Previous"><i class="bi bi-arrow-left"></i></button>
+      <button class="lightbox-btn" id="lt-next" title="Next"><i class="bi bi-arrow-right"></i></button>
+    </div>
+
+    <div class="lightbox-viewport">
+      <div class="lightbox-track">
+        <img class="lightbox-slide" />
+      </div>
     </div>
   </div>
-</main>
+  
+  </div>
+  <div class="navs">  
+  <button class="lightbox-nav prev" id="prev" aria-label="Previous">‹</button>
+  <button class="lightbox-nav next" id="next" aria-label="Next">›</button>
+  </div>
+</div>
 
-<footer class="footer">
-  <div class="container">
-    <div class="footer-links">
-      <a href="/discord/" target="_blank" title="Discord"><i class="bi bi-discord"></i></a>
-      <a href="https://x.com/DenjisWorkspace" target="_blank" title="X (Twitter)"><i class="bi bi-twitter-x"></i></a>
+<!-- Download chooser modal -->
+<div id="download-modal" class="dlmodal hidden" aria-hidden="true">
+  <div class="dlbox" role="dialog" aria-modal="true" aria-labelledby="dl-title">
+    <button class="dl-close" id="dl-close" aria-label="Close">✕</button>
+    <div id="dl-title" class="dltitle">Download Java &amp; Stuff</div>
+
+    <div class="dlrow">
+      <button id="version-select" class="dlselect" aria-haspopup="listbox" aria-expanded="false">
+        <span><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-gamepad-2" viewBox="0 0 24 24" aria-hidden="true" style="display:inline; vertical-align:middle; margin-right:8px;"><path d="M6 11h4M8 9v4M15 12h.01M18 10h.01M17.32 5H6.68a4 4 0 0 0-3.978 3.59q-.008.077-.017.152C2.604 9.416 2 14.456 2 16a3 3 0 0 0 3 3c1 0 1.5-.5 2-1l1.414-1.414A2 2 0 0 1 9.828 16h4.344a2 2 0 0 1 1.414.586L17 18c.5.5 1 1 2 1a3 3 0 0 0 3-3c0-1.545-.604-6.584-.685-7.258q-.01-.075-.017-.151A4 4 0 0 0 17.32 5"></path></svg> Select game version</span>
+        <i class="bi bi-chevron-down" style="font-size: 12px; margin-left: auto;"></i>
+      </button>
+      <ul id="version-list" class="dlmenu hidden" role="listbox" tabindex="-1"></ul>
     </div>
-    <div class="footer-content">
-      <p>Developed by TheCrackersStudio</p>
-      <p>Built for the Minecraft Community.</p>
+
+    <div class="dlrow hidden">
+      <button id="platform-select" class="dlselect disabled" aria-haspopup="listbox" aria-expanded="false" disabled>
+        <span><svg data-v-1b69160f="" data-v-71fa7669-s="" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-wrench" viewBox="0 0 24 24" aria-hidden="true" style="display:inline; vertical-align:middle; margin-right:8px;"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg> Select launcher</span>
+        <i class="bi bi-chevron-down" style="font-size: 12px; margin-left: auto;"></i>
+      </button>
+      <ul id="platform-list" class="dlmenu hidden" role="listbox" tabindex="-1"></ul>
+    </div>
+
+    <div class="dlactions hidden">
+      <button id="final-download" class="dlbtn-primary disabled" disabled>Download</button>
     </div>
   </div>
-</footer>
+</div>
 
-<script>
-/* ─────────────────────────────────────────
-   Randomized messages
-───────────────────────────────────────── */
-(function () {
-  const messages = [
-    "Looks like you've ventured into uncharted territory. The page you're looking for doesn't exist or has been moved.",
-    "You must've taken a wrong turn somewhere. This page doesn't exist — but our homepage does!",
-    "This chunk hasn't loaded yet... and it never will. The page you're after is gone.",
-    "A creeper exploded the page. Nothing left but a crater — head back home.",
-    "You've dug too deep. There's nothing here, not even bedrock.",
-    "This page is as lost as your items after a lava death. Gone forever.",
-    "Respawn point not set. The page you're looking for has despawned.",
-    "Looks like this page fell into the void. We can't get it back.",
-    "That URL doesn't exist in any dimension we know of. Try heading home.",
-    "Even with a map, you wouldn't find this page. It simply doesn't exist.",
-    "This route leads nowhere — kinda like a mineshaft with no ore.",
-    "Herobrine took it. This page is just... gone.",
-    "Inventory full. The page you wanted couldn't be picked up.",
-    "This page is in another biome. Definitely not here.",
-    "You found a rare structure: an empty void with nothing inside.",
-  ];
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script type="module">
+    import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
 
-  const el = document.getElementById('error-message');
-  let lastIndex = -1;
+    /* ===============================
+      SUPABASE
+    ================================ */
+    const supabaseUrl = "https://tkjicusxvwzpdkxmkumf.supabase.co";
+    const supabaseAnonKey =
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRramljdXN4dnd6cGRreG1rdW1mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjcwOTU5NTQsImV4cCI6MjA4MjY3MTk1NH0.xCJNeYPmxIrTAkHB2pymv3GLX4e5jwzjGZYbhnOj6GI";
 
-  function showNext() {
-    let next;
-    do { next = Math.floor(Math.random() * messages.length); } while (next === lastIndex);
-    lastIndex = next;
-    el.classList.add('fade-out');
-    setTimeout(() => {
-      el.textContent = messages[lastIndex];
-      el.classList.remove('fade-out');
-    }, 300);
-  }
+    const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
-  showNext();
-  setInterval(showNext, 5000);
-})();
-</script>
+    /* ===============================
+      SPLASH HELPERS
+    ================================ */
+    const splash = document.getElementById("splash");
+    const splashStatus = document.getElementById("splash-status");
 
+    function setStatus(text) {
+      console.log(text);
+    }
+
+    function sleep(ms) {
+      return new Promise(r => setTimeout(r, ms));
+    }
+
+    /* ===============================
+      DATA LOADERS
+    ================================ */
+    async function loadDescription() {
+      setStatus("Loading description…");
+      const { data, error } = await supabase
+        .from("projects")
+        .select("description")
+        .maybeSingle();
+
+      if (error) throw error;
+
+      const container = document.getElementById("desc-content");
+      container.innerHTML = marked.parse(data?.description || "No description.");
+
+      // Wrap each heading that is followed by a list into an animated collapsible
+      Array.from(container.querySelectorAll("h2, h3")).forEach(heading => {
+        const nextEl = heading.nextElementSibling;
+        if (!nextEl || (nextEl.tagName !== "UL" && nextEl.tagName !== "OL")) return;
+
+        const contentNodes = [];
+        let cur = nextEl;
+        while (cur && (cur.tagName === "UL" || cur.tagName === "OL" || cur.tagName === "P")) {
+          contentNodes.push(cur);
+          cur = cur.nextElementSibling;
+        }
+
+        const details = document.createElement("details");
+        const summary = document.createElement("summary");
+        summary.textContent = heading.textContent;
+        details.appendChild(summary);
+
+        const wrapper = document.createElement("div");
+        wrapper.className = "details-wrapper";
+        contentNodes.forEach(node => wrapper.appendChild(node));
+        details.appendChild(wrapper);
+
+        heading.replaceWith(details);
+      });
+
+      // Animate open/close with smooth max-height
+      function setupDetailsToggle(det) {
+        const summary = det.querySelector("summary");
+        const wrapper = det.querySelector(".details-wrapper");
+
+        if (!summary || !wrapper) return;
+
+        // Close by default
+        det.removeAttribute("open");
+        det.classList.remove("is-open");
+        wrapper.style.maxHeight = "0px";
+        wrapper.style.opacity = "0";
+
+        summary.addEventListener("click", (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          
+          if (!det.classList.contains("is-open")) {
+            // Opening animation
+            det.classList.add("is-open");
+            det.setAttribute("open", "");
+            
+            // Double requestAnimationFrame ensures layout is complete before measuring
+            requestAnimationFrame(() => {
+              requestAnimationFrame(() => {
+                const scrollHeight = wrapper.scrollHeight;
+                wrapper.style.maxHeight = scrollHeight + "px";
+                wrapper.style.opacity = "1";
+              });
+            });
+          } else {
+            // Closing animation
+            det.classList.remove("is-open");
+            wrapper.style.maxHeight = "0px";
+            wrapper.style.opacity = "0";
+            
+            setTimeout(() => {
+              if (!det.classList.contains("is-open")) {
+                det.removeAttribute("open");
+              }
+            }, 500);
+          }
+        });
+      }
+
+      container.querySelectorAll("details").forEach(setupDetailsToggle);
+    }
+
+    
+      /* ===============================
+        IMAGE VIEWER (LIGHTBOX)
+      =============================== */
+      const lightboxEl = document.getElementById("lightbox");
+      const ltClose = document.getElementById("lt-close");
+      const ltOpenLink = document.getElementById("lt-open-link");
+      const ltFullscreen = document.getElementById("lt-fullscreen");
+      const ltPrev = document.getElementById("lt-prev");
+      const ltNext = document.getElementById("lt-next");
+      const lbSlide = lightboxEl.querySelector(".lightbox-slide");
+
+      let currentGallery = [];
+      let galleryIndex = 0;
+
+      function updateLightbox() {
+        lbSlide.src = currentGallery[galleryIndex].image_url;
+      }
+
+      function openLightbox(index, items) {
+        currentGallery = items;
+        galleryIndex = index;
+        updateLightbox();
+        lightboxEl.classList.add("open");
+        document.body.style.overflow = "hidden";
+      }
+
+      function closeLightbox() {
+        lightboxEl.classList.remove("open");
+        document.body.style.overflow = "";
+        if (document.fullscreenElement) document.exitFullscreen();
+      }
+
+      if (ltClose) ltClose.addEventListener("click", closeLightbox);
+      if (ltOpenLink) ltOpenLink.addEventListener("click", () => window.open(currentGallery[galleryIndex].image_url, "_blank"));
+      if (ltFullscreen) ltFullscreen.addEventListener("click", () => {
+        if (!document.fullscreenElement) lightboxEl.requestFullscreen().catch(e => console.error(e));
+        else document.exitFullscreen();
+      });
+      if (ltPrev) ltPrev.addEventListener("click", () => {
+        galleryIndex = (galleryIndex - 1 + currentGallery.length) % currentGallery.length;
+        updateLightbox();
+      });
+      if (ltNext) ltNext.addEventListener("click", () => {
+        galleryIndex = (galleryIndex + 1) % currentGallery.length;
+        updateLightbox();
+      });
+
+      lightboxEl.addEventListener("click", (e) => {
+        if (e.target === lightboxEl || e.target.classList.contains("lightbox-viewport")) closeLightbox();
+      });
+
+      document.addEventListener("keydown", (e) => {
+        if (!lightboxEl.classList.contains("open")) return;
+        if (e.key === "Escape") closeLightbox();
+        if (e.key === "ArrowLeft") ltPrev && ltPrev.click();
+        if (e.key === "ArrowRight") ltNext && ltNext.click();
+      });
+
+      async function loadGallery() {
+        setStatus("Loading gallery…");
+        const { data, error } = await supabase.from("gallery_items").select("*").order("created_at", { ascending: true });
+        if (error) throw error;
+        const container = document.getElementById("gallery-list");
+        container.innerHTML = "";
+        data.forEach((item, index) => {
+          const div = document.createElement("div");
+          div.className = "gcard";
+          div.innerHTML = `<div class="gimg"><img src="${item.image_url}" class="gallery-img"/></div><div class="gbody"><div class="gtitle">${item.title}</div><div class="gmeta">${item.details}</div></div>`;
+          div.addEventListener("click", () => openLightbox(index, data));
+          container.appendChild(div);
+        });
+      }
+  
+
+    async function loadVersions() {
+      setStatus("Loading versions…");
+      const { data, error } = await supabase
+        .from("versions")
+        .select("*")
+        .order("created_at", { ascending: false });
+
+      if (error) throw error;
+
+      const container = document.getElementById("versions-list");
+      container.innerHTML = "";
+
+      data.forEach(item => {
+        const row = document.createElement("div");
+        row.className = "rowv";
+        row.innerHTML = `
+          <div class="ver-left">
+            <div class="verbadge">R</div>
+            <div class="ver-info">
+              <div class="ver-name">${item.name}</div>
+              <div class="ver-desc">Java & Stuff ${item.name}</div>
+            </div>
+          </div>
+          <div class="ver-meta">
+            <div class="ver-game"><span class="badge">${item.game_version}</span></div>
+            <div class="platforms">
+              ${item.platforms.map(p => `<span class="badge pill">${p}</span>`).join("")}
+            </div>
+          </div>
+          <div class="ver-actions">
+            <a class="dlbtn-ver" href="${item.file_url}" data-download>
+              <i class="bi bi-download"></i>
+            </a>
+          </div>
+        `;
+        container.appendChild(row);
+      });
+    }
+
+    function formatNumber(num) {
+      if (num < 1000) return num.toString();
+      const units = [
+        { v: 1e12, s: "T" },
+        { v: 1e9, s: "B" },
+        { v: 1e6, s: "M" },
+        { v: 1e3, s: "K" }
+      ];
+      for (const u of units) {
+        if (num >= u.v) return `${Math.floor((num / u.v) * 10) / 10}${u.s}`;
+      }
+      return num.toString();
+    }
+
+    async function loadDownloadCount() {
+      setStatus("Loading download stats…");
+      const { data, error } = await supabase
+        .from("download_stats")
+        .select("total_downloads")
+        .eq("id", 1)
+        .maybeSingle();
+
+      if (error) throw error;
+
+      document.getElementById("download-count").textContent =
+        formatNumber(data.total_downloads);
+    }
+
+    /* ===============================
+      DOWNLOAD CHOOSER
+    =============================== */
+
+    let versionsCache = []; 
+    let selectedVersion = null;
+    let selectedPlatform = null;
+
+    async function loadAllDownloads() {
+      setStatus("Loading download metadata…");
+      const { data, error } = await supabase
+        .from("versions")
+        .select("id, name, game_version, platform, platforms, file_url, created_at")
+        .order("created_at", { ascending: false });
+
+      if (error) {
+        console.error("Failed to load downloads:", error);
+        return;
+      }
+      versionsCache = data || [];
+    }
+
+    function getAvailableVersions() {
+      return [...new Set(versionsCache.map(v => v.name))];
+    }
+
+    function getPlatformsForVersion(versionName) {
+      return [...new Set(
+        versionsCache
+          .filter(v => v.name === versionName)
+          .map(v => (v.platform || (Array.isArray(v.platforms) ? v.platforms[0] : null)))
+          .filter(Boolean)
+      )];
+    }
+
+    function resolveDownload(versionName, platform) {
+      return versionsCache.find(v => {
+        const p = v.platform || (Array.isArray(v.platforms) ? v.platforms[0] : null);
+        return v.name === versionName && p === platform;
+      });
+    }
+
+    const modal = document.getElementById("download-modal");
+    const versionBtn = document.getElementById("version-select");
+    const versionList = document.getElementById("version-list");
+    const platformBtn = document.getElementById("platform-select");
+    const platformList = document.getElementById("platform-list");
+    const finalDownload = document.getElementById("final-download");
+    const modalClose = document.getElementById("dl-close");
+
+    function closeModal() {
+      modal.classList.add("hidden");
+      modal.setAttribute("aria-hidden", "true");
+      versionList.classList.remove("is-visible");
+      platformList.classList.remove("is-visible");
+      setTimeout(() => {
+        versionList.classList.add("hidden");
+        platformList.classList.add("hidden");
+      }, 400);
+      versionBtn.setAttribute("aria-expanded", "false");
+      platformBtn.setAttribute("aria-expanded", "false");
+      versionBtn.classList.remove("is-active");
+      platformBtn.classList.remove("is-active");
+    }
+
+    function openModal() {
+      populateVersionList();
+      modal.classList.remove("hidden");
+      modal.setAttribute("aria-hidden", "false");
+      
+      // Reset UI state to compact with animation properties
+      platformBtn.parentElement.classList.add("hidden");
+      platformBtn.parentElement.style.opacity = "0";
+      platformBtn.parentElement.style.transform = "translateY(-10px)";
+      
+      finalDownload.parentElement.classList.add("hidden");
+      finalDownload.parentElement.style.opacity = "0";
+      finalDownload.parentElement.style.transform = "translateY(-10px)";
+    }
+
+    function populateVersionList() {
+      versionList.innerHTML = "";
+      const versions = getAvailableVersions();
+      versions.forEach((v, index) => {
+        const li = document.createElement("li");
+        li.innerHTML = `<span>${v}</span>`;
+        li.tabIndex = 0;
+        li.style.opacity = "0";
+        li.style.transform = "translateY(-10px)";
+        li.style.transition = "all 0.3s ease";
+        
+        li.addEventListener("click", () => {
+          selectedVersion = v;
+          const iconSpan = versionBtn.querySelector('span');
+          if (iconSpan) {
+            iconSpan.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-gamepad-2" viewBox="0 0 24 24" aria-hidden="true" style="display:inline; vertical-align:middle; margin-right:8px;"><path d="M6 11h4M8 9v4M15 12h.01M18 10h.01M17.32 5H6.68a4 4 0 0 0-3.978 3.59q-.008.077-.017.152C2.604 9.416 2 14.456 2 16a3 3 0 0 0 3 3c1 0 1.5-.5 2-1l1.414-1.414A2 2 0 0 1 9.828 16h4.344a2 2 0 0 1 1.414.586L17 18c.5.5 1 1 2 1a3 3 0 0 0 3-3c0-1.545-.604-6.584-.685-7.258q-.01-.075-.017-.151A4 4 0 0 0 17.32 5"></path></svg> ${v}`;
+          }
+          
+          const platformRow = platformBtn.parentElement;
+          platformRow.classList.remove("hidden");
+          void platformRow.offsetWidth;
+          platformRow.style.opacity = "1";
+          platformRow.style.transform = "translateY(0)";
+          
+          platformBtn.classList.remove("disabled");
+          platformBtn.disabled = false;
+          selectedPlatform = null;
+          const pIconSpan = platformBtn.querySelector('span');
+          if (pIconSpan) {
+            pIconSpan.innerHTML = `<svg data-v-1b69160f="" data-v-71fa7669-s="" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-wrench" viewBox="0 0 24 24" aria-hidden="true" style="display:inline; vertical-align:middle; margin-right:8px;"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg> Select launcher`;
+          }
+          
+          const downloadActions = finalDownload.parentElement;
+          downloadActions.classList.add("hidden");
+          downloadActions.style.opacity = "0";
+          downloadActions.style.transform = "translateY(-10px)";
+          
+          versionList.classList.remove("is-visible");
+          setTimeout(() => versionList.classList.add("hidden"), 400);
+          versionBtn.setAttribute("aria-expanded", "false");
+          versionBtn.classList.remove("is-active");
+        });
+        versionList.appendChild(li);
+        
+        requestAnimationFrame(() => {
+          setTimeout(() => {
+            li.style.opacity = "1";
+            li.style.transform = "translateY(0)";
+          }, index * 50);
+        });
+      });
+    }
+
+    function populatePlatformList(versionName) {
+      platformList.innerHTML = "";
+      const platforms = getPlatformsForVersion(versionName);
+      platforms.forEach((p, index) => {
+        const li = document.createElement("li");
+        li.innerHTML = `<span>${p}</span>`;
+        li.tabIndex = 0;
+        li.style.opacity = "0";
+        li.style.transform = "translateY(-10px)";
+        li.style.transition = "all 0.3s ease";
+        
+        li.addEventListener("click", () => {
+          selectedPlatform = p;
+          const pIconSpan = platformBtn.querySelector('span');
+          if (pIconSpan) {
+            pIconSpan.innerHTML = `<svg data-v-1b69160f="" data-v-71fa7669-s="" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-wrench" viewBox="0 0 24 24" aria-hidden="true" style="display:inline; vertical-align:middle; margin-right:8px;"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg> ${p}`;
+          }
+          
+          const downloadActions = finalDownload.parentElement;
+          downloadActions.classList.remove("hidden");
+          void downloadActions.offsetWidth;
+          downloadActions.style.opacity = "1";
+          downloadActions.style.transform = "translateY(0)";
+          
+          finalDownload.classList.remove("disabled");
+          finalDownload.disabled = false;
+          platformList.classList.remove("is-visible");
+          setTimeout(() => platformList.classList.add("hidden"), 400);
+          platformBtn.setAttribute("aria-expanded", "false");
+          platformBtn.classList.remove("is-active");
+        });
+        platformList.appendChild(li);
+        
+        requestAnimationFrame(() => {
+          setTimeout(() => {
+            li.style.opacity = "1";
+            li.style.transform = "translateY(0)";
+          }, index * 50);
+        });
+      });
+    }
+
+    versionBtn.addEventListener("click", () => {
+      const isVisible = versionList.classList.contains("is-visible");
+      if (!isVisible) {
+        populateVersionList();
+        versionList.classList.remove("hidden");
+        void versionList.offsetWidth;
+        versionList.classList.add("is-visible");
+        versionBtn.setAttribute("aria-expanded", "true");
+        versionBtn.classList.add("is-active");
+        platformList.classList.remove("is-visible");
+        setTimeout(() => platformList.classList.add("hidden"), 400);
+        platformBtn.setAttribute("aria-expanded", "false");
+        platformBtn.classList.remove("is-active");
+      } else {
+        versionList.classList.remove("is-visible");
+        setTimeout(() => versionList.classList.add("hidden"), 400);
+        versionBtn.setAttribute("aria-expanded", "false");
+        versionBtn.classList.remove("is-active");
+      }
+    });
+
+    platformBtn.addEventListener("click", () => {
+      if (platformBtn.disabled) return;
+      const isVisible = platformList.classList.contains("is-visible");
+      if (!isVisible) {
+        if (!selectedVersion) return;
+        populatePlatformList(selectedVersion);
+        platformList.classList.remove("hidden");
+        void platformList.offsetWidth;
+        platformList.classList.add("is-visible");
+        platformBtn.setAttribute("aria-expanded", "true");
+        platformBtn.classList.add("is-active");
+        versionList.classList.remove("is-visible");
+        setTimeout(() => versionList.classList.add("hidden"), 400);
+        versionBtn.setAttribute("aria-expanded", "false");
+        versionBtn.classList.remove("is-active");
+      } else {
+        platformList.classList.remove("is-visible");
+        setTimeout(() => platformList.classList.add("hidden"), 400);
+        platformBtn.setAttribute("aria-expanded", "false");
+        platformBtn.classList.remove("is-active");
+      }
+    });
+
+    modalClose.addEventListener("click", closeModal);
+    modal.addEventListener("click", (e) => {
+      if (e.target === modal) closeModal();
+    });
+
+    finalDownload.addEventListener("click", () => {
+      if (!selectedVersion || !selectedPlatform) return;
+      const file = resolveDownload(selectedVersion, selectedPlatform);
+      if (!file || !file.file_url) {
+        console.warn("No file found for", selectedVersion, selectedPlatform);
+        return;
+      }
+      window.location.href = file.file_url;
+      closeModal();
+    });
+
+    const mainDownloadBtn = document.getElementById("download-btn");
+    if (mainDownloadBtn) {
+      mainDownloadBtn.addEventListener("click", (e) => {
+        window.location.href = "download/index.html";
+      });
+    }
+
+    function waitForImages(container) {
+      const imgs = Array.from(container.querySelectorAll("img"));
+      const promises = imgs.map(img => {
+        if (img.complete) return Promise.resolve();
+        return new Promise(resolve => {
+          img.onload = img.onerror = resolve;
+        });
+      });
+      return Promise.all(promises);
+    }
+
+    /* ===============================
+      TAB SYSTEM
+    ================================ */
+    const tabs = document.querySelectorAll('.tab');
+    const panels = document.querySelectorAll('.tab-panel');
+    const slider = document.querySelector('.tab-slider');
+
+    function updateSlider(activeTab) {
+      if (!slider) return;
+      slider.style.width = `${activeTab.offsetWidth}px`;
+      slider.style.left = `${activeTab.offsetLeft}px`;
+    }
+
+    // Initialize slider position
+    const activeTabInit = document.querySelector('.tab.active');
+    if (activeTabInit) {
+      setTimeout(() => updateSlider(activeTabInit), 100);
+    }
+
+    tabs.forEach(tab => {
+      tab.addEventListener('click', async () => {
+        if (tab.classList.contains('active')) return;
+
+        tabs.forEach(t => t.classList.remove('active'));
+        panels.forEach(p => p.classList.remove('active'));
+
+        tab.classList.add('active');
+        updateSlider(tab);
+
+        const target = tab.getAttribute('data-tab');
+        const panel = document.getElementById(target);
+        if (panel) panel.classList.add('active');
+
+        if (target === "gallery") await loadGallery();
+        if (target === "versions") await loadVersions();
+      });
+    });
+
+    window.addEventListener('resize', () => {
+      const active = document.querySelector('.tab.active');
+      if (active) updateSlider(active);
+    });
+
+    async function bootApp() {
+      if (document.readyState !== "complete") {
+        await new Promise(r => window.addEventListener("load", r, { once: true }));
+      }
+
+      try {
+        setStatus("Preparing download…");
+        await loadAllDownloads();
+        setStatus("Loading description…");
+        await loadDescription();
+        await waitForImages(document.getElementById("desc-content"));
+        setStatus("Loading gallery…");
+        await loadGallery();
+        await waitForImages(document.getElementById("gallery-list"));
+        setStatus("Loading versions…");
+        await loadVersions();
+        await waitForImages(document.getElementById("versions-list"));
+        setStatus("Loading download stats…");
+        await loadDownloadCount();
+        setStatus("Finalizing…");
+        await sleep(500);
+      } catch (e) {
+        console.error(e);
+        setStatus("Loaded with warnings");
+        await sleep(1000);
+      }
+      splash.classList.add("hidden");
+      document.body.style.overflow = "auto";
+    }
+
+    bootApp();
+
+    if (window.innerWidth <= 768) {
+      const sidebar = document.querySelector('.sidebar');
+      const tabPanels = document.querySelectorAll('.tab-panel');
+      tabPanels.forEach(panel => {
+        panel.appendChild(sidebar.cloneNode(true));
+      });
+      if (sidebar) sidebar.style.display = 'none';
+    }
+
+    // Wrap existing tab panels into a sliding wrapper
+    const section = document.querySelector('section');
+    if (section) {
+      const wrapper = document.createElement('div');
+      wrapper.className = 'tab-panels-wrapper';
+      document.querySelectorAll('.tab-panel').forEach(p => wrapper.appendChild(p));
+      section.appendChild(wrapper);
+    }
+
+    lottie.loadAnimation({
+      container: document.getElementById("splash-lottie"),
+      renderer: "svg",
+      loop: true,
+      autoplay: true,
+      path: "loading.json"
+    });
+
+    function triggerAnimation() { }
+
+    let galleryImages = [];
+    const lightbox = document.getElementById("lightbox");
+    const track = lightbox.querySelector(".lightbox-track");
+    const slides = lightbox.querySelectorAll(".lightbox-slide");
+    const closeBtn = lightbox.querySelector(".lightbox-close");
+    const nextBtn = document.getElementById("next");
+    const prevBtn = document.getElementById("prev");
+
+    let currentIndex = 0;
+
+    function refreshGalleryImages() {
+      galleryImages = Array.from(document.querySelectorAll(".gallery-img"));
+    }
+
+    function openLightboxByIndex(index) {
+      currentIndex = index;
+      updateSlides(index);
+      lightbox.classList.add("open");
+    }
+
+    function updateSlides(index) {
+      slides[0].src = galleryImages[index].src;
+      track.style.transition = "none";
+      track.style.transform = "translateX(0)";
+    }
+
+    function slideTo(direction) {
+      let nextIndex;
+      if (direction === "next") {
+        nextIndex = (currentIndex + 1) % galleryImages.length;
+      } else {
+        nextIndex = (currentIndex - 1 + galleryImages.length) % galleryImages.length;
+      }
+
+      const incomingSlide = slides[1];
+      incomingSlide.src = galleryImages[nextIndex].src;
+
+      if (direction === "next") {
+        track.style.transition = "none";
+        track.style.transform = "translateX(0)";
+        void track.offsetWidth;
+        track.style.transition = "transform 0.35s ease";
+        track.style.transform = "translateX(-50%)";
+      } else {
+        track.style.transition = "none";
+        track.style.transform = "translateX(-50%)";
+        void track.offsetWidth;
+        track.style.transition = "transform 0.35s ease";
+        track.style.transform = "translateX(0)";
+      }
+
+      const finishSlide = (idx) => {
+        currentIndex = idx;
+        slides[0].src = galleryImages[idx].src;
+        track.style.transition = "none";
+        track.style.transform = "translateX(0)";
+      };
+
+      let finished = false;
+      const cleanup = () => {
+        if (finished) return;
+        finished = true;
+        finishSlide(nextIndex);
+      };
+
+      track.addEventListener("transitionend", cleanup, { once: true });
+      setTimeout(cleanup, 400);
+    }
+
+    nextBtn.addEventListener("click", () => slideTo("next"));
+    prevBtn.addEventListener("click", () => slideTo("prev"));
+    closeBtn.addEventListener("click", () => lightbox.classList.remove("open"));
+
+    document.getElementById("gallery-list").addEventListener("click", e => {
+      const img = e.target.closest(".gallery-img");
+      if (!img) return;
+      refreshGalleryImages();
+      openLightboxByIndex(galleryImages.indexOf(img));
+    });
+
+    document.addEventListener("keydown", e => {
+      if (!lightbox.classList.contains("open")) return;
+      if (e.key === "Escape") closeBtn.click();
+      if (e.key === "ArrowRight") nextBtn.click();
+      if (e.key === "ArrowLeft") prevBtn.click();
+    });
+
+    const next_m = document.getElementById("next");
+    const prev_m = document.getElementById("prev");
+
+    if (next_m) {
+      next_m.addEventListener("click", () => {
+        next_m.classList.remove("animater");
+        void next_m.offsetWidth;
+        next_m.classList.add("animater");
+      });
+    }
+
+    if (prev_m) {
+      prev_m.addEventListener("click", () => {
+        prev_m.classList.remove("animatel");
+        void prev_m.offsetWidth;
+        prev_m.classList.add("animatel");
+      });
+    }
+
+    document.getElementById("desc").addEventListener("click", e => {
+      const summary = e.target.closest("summary");
+      if (!summary) return;
+      const details = summary.parentElement;
+      
+      // Wrap content if not already wrapped
+      let content = details.querySelector(".details-wrapper");
+      if (!content) {
+          content = document.createElement("div");
+          content.className = "details-wrapper";
+          // Collect siblings after summary
+          const siblings = Array.from(details.childNodes).filter(node => node !== summary && node.className !== "details-wrapper");
+          siblings.forEach(node => content.appendChild(node));
+          details.appendChild(content);
+      }
+      
+      e.preventDefault();
+      
+      if (details.classList.contains("is-open")) {
+        content.style.maxHeight = content.scrollHeight + "px";
+        requestAnimationFrame(() => {
+          content.style.maxHeight = "0";
+          content.style.opacity = "0";
+        });
+        details.classList.remove("is-open");
+        setTimeout(() => details.removeAttribute("open"), 400);
+      } else {
+        details.setAttribute("open", "");
+        const fullHeight = content.scrollHeight;
+        content.style.maxHeight = "0";
+        content.style.opacity = "0";
+        requestAnimationFrame(() => {
+          content.style.maxHeight = fullHeight + "px";
+          content.style.opacity = "1";
+          details.classList.add("is-open");
+        });
+      }
+    });
+  </script>
 </body>
 </html>
