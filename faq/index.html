@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <title>Java & Stuff - FAQ</title>
+  <title>FAQ - Java & Stuff - Actions & Stuff For Minecraft Java Edition</title>
   <meta name="description" content="Frequently Asked Questions about Java & Stuff modpack for Minecraft Java Edition. Get answers about installation, compatibility, features, and more.">
   <meta name="keywords" content="Java & Stuff FAQ, Minecraft FAQ, Modpack FAQ, Java Edition, Actions & Stuff, Minecraft Help, Modpack Support, Minecraft Mods, Minecraft Java">
   <meta name="robots" content="index, follow">
@@ -156,10 +156,10 @@
               </ul>
               <p><strong>Installation Steps:</strong></p>
               <ol>
-                <li>Download the .mrpack from the <a href="/download/">Download page</a></li>
-                <li>Create a new instance on Modrinth</li>
-                <li>Select "Modpack base," then select import modpack</li>
-                <li>Select "Java & Stuff" from your file manager.</li>
+                <li>Download the modpack from the <a href="/download/">Download page</a></li>
+                <li>Extract the ZIP file to your Minecraft data folder</li>
+                <li>Launch Minecraft using the Fabric loader</li>
+                <li>Select "Java & Stuff" from your game versions</li>
                 <li>Play and enjoy!</li>
               </ol>
               <p><em>For detailed setup instructions, visit our Discord community for step-by-step support.</em></p>
@@ -215,7 +215,7 @@
         <div class="faq-category">Gameplay & Features</div>
 
         <details class="animated-details">
-          <summary>What is "Java & Stuff"?</summary>
+          <summary>What is "Actions & Stuff"?</summary>
           <div class="details-wrapper">
             <div class="markdown">
               <p>Java & Stuff is a carefully curated modpack designed to replicate the "Actions & Stuff" experience on Minecraft Java Edition. It focuses on:</p>
@@ -253,7 +253,7 @@
             <div class="markdown">
               <p>Yes! The modpack is designed to be customizable. You can add or remove mods as long as they're compatible with:</p>
               <ul>
-                <li>Fabric Loader 0.18.2</li>
+                <li>Fabric Loader 0.15.x+</li>
                 <li>Minecraft 1.21.8</li>
                 <li>The existing mod dependencies</li>
               </ul>
@@ -573,6 +573,135 @@
     } else {
       initializeDetails();
     }
+
+    /* ===============================
+      CUSTOM CONTEXT MENU
+    ================================ */
+    
+    // Wait for DOM to be ready before setting up context menu
+    document.addEventListener('DOMContentLoaded', function() {
+      // Global context menu handling
+      const contextMenu = document.getElementById('context-menu');
+      
+      if (!contextMenu) return;
+      
+      function showContextMenu(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        // Reset animation states
+        contextMenu.classList.remove('hide');
+        contextMenu.style.display = 'block';
+        
+        contextMenu.style.position = 'fixed';
+        contextMenu.style.left = e.pageX + 'px';
+        contextMenu.style.top = e.pageY + 'px';
+        
+        // Trigger fade in animation
+        contextMenu.classList.add('show');
+        
+        // Adjust if off-screen
+        setTimeout(function() {
+          const rect = contextMenu.getBoundingClientRect();
+          if (rect.right > window.innerWidth) {
+            contextMenu.style.left = (e.pageX - rect.width) + 'px';
+          }
+          if (rect.bottom > window.innerHeight) {
+            contextMenu.style.top = (e.pageY - rect.height) + 'px';
+          }
+        }, 0);
+      }
+      
+      function hideContextMenu() {
+        contextMenu.classList.remove('show');
+        contextMenu.classList.add('hide');
+        
+        // Remove classes and hide after animation completes
+        setTimeout(function() {
+          contextMenu.classList.remove('hide');
+          contextMenu.style.display = 'none';
+        }, 200);
+      }
+      
+      // Show menu on right-click
+      window.addEventListener('contextmenu', showContextMenu, false);
+      
+      // Hide menu on left click or elsewhere
+      window.addEventListener('click', function(e) {
+        if (contextMenu.classList.contains('show') && e.target.closest('.context-menu') === null) {
+          hideContextMenu();
+        }
+      }, false);
+      
+      // Hide on Escape
+      window.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && contextMenu.classList.contains('show')) {
+          hideContextMenu();
+        }
+      });
+      
+      // Handle menu item clicks
+      contextMenu.addEventListener('click', function(e) {
+        e.preventDefault();
+        const button = e.target.closest('.context-menu-item');
+        if (!button) return;
+        
+        const action = button.getAttribute('data-action');
+        
+        switch(action) {
+          case 'back':
+            window.history.back();
+            break;
+          case 'forward':
+            window.history.forward();
+            break;
+          case 'reload':
+            window.location.reload();
+            break;
+          case 'nav-home':
+            window.location.href = '/';
+            break;
+          case 'nav-discord':
+            window.location.href = '/discord/';
+            break;
+          case 'nav-download':
+            window.location.href = '/download/';
+            break;
+        }
+        
+        hideContextMenu();
+      });
+    });
   </script>
+
+<!-- Custom Context Menu -->
+<div id="context-menu" class="context-menu" role="menu" aria-hidden="true">
+  <button class="context-menu-item" data-action="back" aria-label="Back">
+    <i class="bi bi-arrow-left"></i>
+    <span>Back</span>
+  </button>
+  <button class="context-menu-item" data-action="forward" aria-label="Forward">
+    <i class="bi bi-arrow-right"></i>
+    <span>Forward</span>
+  </button>
+  <button class="context-menu-item" data-action="reload" aria-label="Reload">
+    <i class="bi bi-arrow-clockwise"></i>
+    <span>Reload</span>
+  </button>
+  <hr class="context-menu-divider">
+  <button class="context-menu-item" data-action="nav-home" aria-label="Home">
+    <i class="bi bi-house"></i>
+    <span>Home</span>
+  </button>
+  <button class="context-menu-item" data-action="nav-discord" aria-label="Discord">
+    <i class="bi bi-discord"></i>
+    <span>Discord</span>
+  </button>
+  <button class="context-menu-item" data-action="nav-download" aria-label="Download">
+    <i class="bi bi-download"></i>
+    <span>Download</span>
+  </button>
+</div>
+
 </body>
 </html>
