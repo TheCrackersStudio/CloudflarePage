@@ -301,13 +301,18 @@
         const summary = det.querySelector("summary");
         const wrapper = det.querySelector(".details-wrapper");
 
-        if (!summary || !wrapper) return;
+        // For animated-details without wrapper, still set it up
+        if (!summary) return;
+        if (!wrapper && !det.classList.contains("animated-details")) return;
 
         // Close by default
         det.removeAttribute("open");
         det.classList.remove("is-open");
-        wrapper.style.maxHeight = "0px";
-        wrapper.style.opacity = "0";
+        det.classList.remove("closing");
+        if (wrapper) {
+          wrapper.style.maxHeight = "0px";
+          wrapper.style.opacity = "0";
+        }
 
         summary.addEventListener("click", (e) => {
           e.preventDefault();
@@ -318,23 +323,46 @@
             det.classList.add("is-open");
             det.setAttribute("open", "");
             
-            // Double requestAnimationFrame ensures layout is complete before measuring
-            requestAnimationFrame(() => {
-              requestAnimationFrame(() => {
-                const scrollHeight = wrapper.scrollHeight;
-                wrapper.style.maxHeight = scrollHeight + "px";
-                wrapper.style.opacity = "1";
+            // Retrigger animation for animated-details list items
+            if (det.classList.contains("animated-details")) {
+              const listItems = det.querySelectorAll("ul li");
+              listItems.forEach((li) => {
+                li.style.animation = "none";
+                li.style.animationDelay = "0s";
               });
-            });
+              
+              // Force reflow
+              void det.offsetWidth;
+              
+              listItems.forEach((li) => {
+                li.style.animation = "";
+                li.style.animationDelay = "";
+              });
+            }
+            
+            // Double requestAnimationFrame ensures layout is complete before measuring
+            if (wrapper) {
+              requestAnimationFrame(() => {
+                requestAnimationFrame(() => {
+                  const scrollHeight = wrapper.scrollHeight;
+                  wrapper.style.maxHeight = scrollHeight + "px";
+                  wrapper.style.opacity = "1";
+                });
+              });
+            }
           } else {
             // Closing animation
+            det.classList.add("closing");
             det.classList.remove("is-open");
-            wrapper.style.maxHeight = "0px";
-            wrapper.style.opacity = "0";
+            if (wrapper) {
+              wrapper.style.maxHeight = "0px";
+              wrapper.style.opacity = "0";
+            }
             
             setTimeout(() => {
               if (!det.classList.contains("is-open")) {
                 det.removeAttribute("open");
+                det.classList.remove("closing");
               }
             }, 500);
           }
