@@ -763,7 +763,7 @@ details.animated-details {
 
 details.animated-details .details-inner {
   max-height: 600px;
-  overflow: hidden;
+  overflow-y: auto;
   transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.5s ease-out;
   opacity: 1;
   animation: contentFadeIn 0.5s ease-out;
@@ -1064,10 +1064,11 @@ details.is-open .details-wrapper {
 .header-card {
   display: grid;
   grid-template-columns: 100px 1fr 50px;
-  grid-template-areas: "icon title download" "icon desc desc";
+  grid-template-rows: auto auto;
+  grid-template-areas: "icon title title" "icon desc download";
   column-gap: 12px;
-  row-gap: 10px;
-  align-items: start;
+  row-gap: 12px;
+  align-items: center;
 }
 
 /* 🔑 FLATTEN WRAPPER */
@@ -1119,23 +1120,11 @@ details.is-open .details-wrapper {
 .actions {
     grid-area: download;
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
-    margin: 0;
+    margin: 8px 0 0 0;
     width: auto;
     height: 50px;
-  }
-
-  #download-btn {
-    width: 47px;
-    height: 47px;
-    border-radius: 50%;
-    padding: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: var(--blue);
-    transform-origin: center;
   }
 
   #download-btn:active {
@@ -1164,13 +1153,13 @@ details.is-open .details-wrapper {
   .tabs {
     display: flex;
     align-items: center;
-    justify-content: center;
-    margin: 0 auto 20px auto;
+    justify-content: flex-start;
+    margin: 0 0 20px 0;
     width: 100%;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
-    padding: 6px 15px;
+    padding: 6px 0;
     border-radius: 0;
     background: transparent;
   }
