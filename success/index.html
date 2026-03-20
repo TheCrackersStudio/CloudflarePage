@@ -33,78 +33,65 @@
     <meta name="twitter:image" content="https://www.javanstuff.ir/discordembed.png">
     
     <style>
-        /* Custom Cursors */
+        /* Unified site theme (verify/success/already-verified) */
         * {
-          cursor: url('../cursors/customcursor.png'), auto;
+            cursor: url('../cursors/customcursor.png'), auto;
         }
-        a, button, [role="button"], input[type="submit"], input[type="button"], [onclick], .clickable {
-          cursor: url('../cursors/customcursor_hand_grab.png'), grab;
+
+        a, button, [role="button"], .verify-button, .btn-primary, .btn-secondary, input[type="submit"], input[type="button"], [onclick], .clickable {
+            cursor: url('../cursors/customcursor_hand_grab.png'), grab;
+        }
+
+        input, textarea {
+            cursor: url('../cursors/customcursor_beam.png'), text;
         }
 
         body {
             display: flex;
             justify-content: center;
-            align-items: flex-start;
+            align-items: center;
             min-height: 100vh;
-            padding: 20px 20px;
+            padding: 30px;
             box-sizing: border-box;
             text-align: center;
-            padding-top: 40px;
+            background: radial-gradient(circle at top, #272b31 0%, #181a1f 100%);
         }
 
         .container {
             background-color: var(--panel);
             border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 40px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
-            max-width: 500px;
+            border-radius: 16px;
+            padding: 36px;
+            box-shadow: 0 18px 40px rgba(0,0,0,0.35);
+            max-width: 540px;
             width: 100%;
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
         }
 
-        .success-icon {
-            font-size: 4em;
-            color: #4CAF50;
-            margin-bottom: 20px;
-            animation: scaleIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-
-        @keyframes scaleIn {
-            from {
-                transform: scale(0);
-                opacity: 0;
-            }
-            to {
-                transform: scale(1);
-                opacity: 1;
-            }
+        .container:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 22px 55px rgba(0,0,0,0.45);
         }
 
         h1 {
             color: var(--blue);
-            margin-bottom: 10px;
-            font-size: 2em;
-            font-weight: 700;
+            margin-bottom: 12px;
+            font-size: 2.1rem;
+            font-weight: 800;
         }
 
         .subtitle {
-            color: #4CAF50;
-            font-size: 1.1em;
-            font-weight: 600;
-            margin-bottom: 20px;
+            color: #4caf50;
+            font-size: 1.05rem;
+            font-weight: 700;
+            margin-bottom: 18px;
         }
 
         p {
-            font-size: 1em;
+            font-size: 1rem;
             line-height: 1.6;
-            margin-bottom: 30px;
+            margin-bottom: 22px;
             color: var(--text);
-        }
-
-        .button-group {
-            display: flex;
-            gap: 12px;
-            flex-direction: column;
         }
 
         .btn-primary, .btn-secondary {
@@ -112,51 +99,55 @@
             align-items: center;
             justify-content: center;
             gap: 8px;
-            padding: 12px 24px;
-            border-radius: 8px;
+            padding: 12px 22px;
+            border-radius: 10px;
             text-decoration: none;
-            font-weight: 600;
-            font-size: 1em;
+            font-weight: 700;
+            font-size: 1rem;
             transition: all 0.2s ease;
-            border: none;
-            cursor: grab;
+            border: 1px solid transparent;
         }
 
         .btn-primary {
             background-color: var(--blue);
             color: #ffffff;
+            border-color: transparent;
         }
 
         .btn-primary:hover {
             background-color: var(--blue-2);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(14, 135, 249, 0.3);
+            transform: translateY(-1px);
+            box-shadow: 0 5px 14px rgba(14,135,249,0.35);
         }
 
         .btn-secondary {
             background-color: var(--panel-2);
             color: var(--text);
-            border: 1px solid var(--border);
+            border-color: var(--border);
         }
 
         .btn-secondary:hover {
             background-color: var(--border);
-            transform: translateY(-2px);
+            transform: translateY(-1px);
         }
 
         .confirmation-details {
-            background-color: rgba(76, 175, 80, 0.1);
-            border: 1px solid #4CAF50;
-            border-radius: 8px;
-            padding: 16px;
-            margin-bottom: 20px;
+            background-color: rgba(14,135,249,0.08);
+            border-left: 4px solid var(--blue);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 14px;
+            margin: 0 auto 18px;
+            text-align: left;
+            max-width: 450px;
             color: var(--text);
-            font-size: 0.95em;
+            font-size: 0.95rem;
         }
 
         .confirmation-details i {
-            color: #4CAF50;
             margin-right: 8px;
+            color: var(--blue);
+            vertical-align: middle;
         }
     </style>
 </head>
@@ -186,6 +177,13 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            // Redirect to verify if accessed directly (not from verify page)
+            const referrer = document.referrer;
+            if (!referrer || !referrer.includes('/verify')) {
+                window.location.href = '/verify';
+                return;
+            }
+
             // Context menu handling
             const contextMenu = document.getElementById('context-menu');
             
