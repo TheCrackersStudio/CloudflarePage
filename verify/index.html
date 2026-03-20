@@ -4,68 +4,93 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Discord Verification - Java & Stuff</title>
+    
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    
+    <link rel="icon" type="image/png" href="../favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg" />
+    <link rel="shortcut icon" href="../favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png" />
+    <link rel="manifest" href="../site.webmanifest" />
+    
     <style>
+        /* Custom Cursors */
+        * {
+          cursor: url('../cursors/customcursor.png'), auto;
+        }
+        a, button, [role="button"], .verify-button, input[type="submit"], input[type="button"], [onclick], .clickable {
+          cursor: url('../cursors/customcursor_hand_grab.png'), grab;
+        }
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #2c2f33; /* Dark Discord-like background */
-            color: #ffffff;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            margin: 0;
             padding: 20px;
             box-sizing: border-box;
             text-align: center;
         }
 
         .container {
-            background-color: #36393f; /* Slightly lighter Discord-like panel */
-            border-radius: 8px;
+            background-color: var(--panel);
+            border: 1px solid var(--border);
+            border-radius: 12px;
             padding: 40px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
             max-width: 500px;
             width: 100%;
         }
 
         h1 {
-            color: #7289da; /* Discord blue */
+            color: var(--blue);
             margin-bottom: 20px;
             font-size: 2em;
+            font-weight: 700;
         }
 
         p {
             font-size: 1.1em;
             line-height: 1.6;
             margin-bottom: 30px;
+            color: var(--text);
         }
 
         .verify-button {
-            display: inline-block;
-            background-color: #7289da; /* Discord blue */
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background-color: var(--blue);
             color: #ffffff;
-            padding: 15px 30px;
-            border-radius: 5px;
+            padding: 12px 24px;
+            border-radius: 8px;
             text-decoration: none;
-            font-weight: bold;
-            font-size: 1.2em;
-            transition: background-color 0.3s ease;
+            font-weight: 600;
+            font-size: 1.1em;
+            transition: all 0.2s ease;
             border: none;
-            cursor: pointer;
+            cursor: grab;
         }
 
         .verify-button:hover {
-            background-color: #677bc4; /* Darker Discord blue on hover */
+            background-color: var(--blue-2);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(14, 135, 249, 0.3);
+        }
+
+        .verify-button:active {
+            transform: translateY(0);
         }
 
         .loader {
-            border: 4px solid #f3f3f3; /* Light grey */
-            border-top: 4px solid #7289da; /* Discord blue */
+            border: 4px solid var(--border);
+            border-top: 4px solid var(--blue);
             border-radius: 50%;
             width: 30px;
             height: 30px;
             animation: spin 1s linear infinite;
-            display: none; /* Hidden by default */
+            display: none;
             margin: 20px auto 0;
         }
 
@@ -74,34 +99,37 @@
             100% { transform: rotate(360deg); }
         }
 
-        /* Message styles for success/error */
         .message {
             margin-top: 20px;
-            padding: 10px;
-            border-radius: 5px;
-            font-weight: bold;
-            display: none; /* Hidden by default */
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: 600;
+            display: none;
+            border: 1px solid var(--border);
         }
 
         .message.success {
-            background-color: #4CAF50; /* Green */
-            color: white;
+            background-color: rgba(76, 175, 80, 0.1);
+            color: #4CAF50;
+            border-color: #4CAF50;
         }
 
         .message.error {
-            background-color: #f44336; /* Red */
-            color: white;
+            background-color: rgba(244, 67, 54, 0.1);
+            color: #f44336;
+            border-color: #f44336;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Discord Verification</h1>
+        <h1><i class="bi bi-discord"></i> Discord Verification</h1>
         <p>
             Click the button below to link your Discord account with Java & Stuff. 
             This will grant you access to exclusive server features.
         </p>
         <a id="verifyLink" href="YOUR_DISCORD_AUTH_URL_HERE" class="verify-button">
+            <i class="bi bi-check-circle"></i>
             Verify with Discord
         </a>
         <div id="loading" class="loader"></div>
@@ -114,8 +142,6 @@
             const loadingSpinner = document.getElementById('loading');
             const responseMessage = document.getElementById('responseMessage');
 
-            // Replace YOUR_CLIENT_ID and ensure redirect_uri is URL-encoded
-            // Example: https%3A%2F%2Fjavanstuff.ir%2Fverify
             const discordAuthUrl = "https://discord.com/api/oauth2/authorize?" +
                                    "client_id=1473350061344952330&" +
                                    "redirect_uri=https%3A%2F%2Fjavanstuff.ir%2Fverify&" +
@@ -123,18 +149,11 @@
                                    "scope=identify+guilds.join";
             verifyLink.href = discordAuthUrl;
 
-            // Optional: Show loading spinner if user clicks the button
             verifyLink.addEventListener('click', () => {
-                verifyLink.style.display = 'none'; // Hide button
-                loadingSpinner.style.display = 'block'; // Show spinner
-                responseMessage.style.display = 'none'; // Clear any previous messages
+                verifyLink.style.display = 'none';
+                loadingSpinner.style.display = 'block';
+                responseMessage.style.display = 'none';
             });
-
-            // Handle messages from the Cloudflare Worker's response (if it returns HTML)
-            // This part is more complex if the worker directly returns a success/error message
-            // which replaces the page. For a simple success/error page from the worker,
-            // this JS on the *initial* page is less relevant after redirection.
-            // If the worker sends a redirect back, the behavior changes.
         });
     </script>
 </body>
