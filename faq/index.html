@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>FAQ - Java & Stuff - Actions & Stuff For Minecraft Java Edition</title>
+  <meta name="description" content="Frequently Asked Questions about Java & Stuff modpack for Minecraft Java Edition. Get answers about installation, compatibility, features, and more.">
+  <meta name="keywords" content="Java & Stuff FAQ, Minecraft FAQ, Modpack FAQ, Java Edition, Actions & Stuff, Minecraft Help, Modpack Support, Minecraft Mods, Minecraft Java">
+  <meta name="robots" content="index, follow">
+  <meta name="author" content="TheCrackersStudio">
+
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+
+  <link rel="icon" type="image/png" href="../favicon-96x96.png" sizes="96x96" />
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg" />
+  <link rel="shortcut icon" href="../favicon.ico" />
+  <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png" />
+  <link rel="manifest" href="../site.webmanifest" />
+
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="theme-color" content="#fcfc37">
+
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="FAQ - Java & Stuff">
+  <meta property="og:description" content="Frequently Asked Questions about Java & Stuff modpack for Minecraft Java Edition.">
+  <meta property="og:url" content="https://www.javanstuff.ir/FAQ">
+  <meta property="og:image" content="https://www.javanstuff.ir/discordembed.png">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="FAQ - Java & Stuff">
+  <meta name="twitter:description" content="Get answers to frequently asked questions about Java & Stuff.">
+  <meta name="twitter:image" content="https://www.javanstuff.ir/discordembed.png">
+
+  <style>
+    /* Custom Cursors */
+    * {
+      cursor: url('../cursors/customcursor.png'), auto;
+    }
+    a, button, [role="button"], .tab, .dlbtn-ver, input[type="submit"], input[type="button"], [onclick], .clickable, details > summary {
+      cursor: url('../cursors/customcursor_hand_grab.png'), grab;
+    }
+
+    /* FAQ-specific styling */
+    .faq-section {
+      margin: 32px 0;
+    }
+
+    .faq-category {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text);
+      margin: 24px 0 16px;
+      padding-bottom: 12px;
+      border-bottom: 2px solid var(--border);
+    }
+
+    /* Fix for animated-details wrapper in FAQ */
+    details.animated-details {
+      overflow: visible;
+    }
+
+    details.animated-details .details-wrapper {
+      max-height: 0;
+      overflow: hidden;
+      opacity: 0;
+      padding: 0 1rem;
+      transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1), padding 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      will-change: max-height, opacity;
+    }
+
+    details.animated-details.is-open .details-wrapper {
+      opacity: 1;
+      padding: 0.75rem 1rem;
+    }
+
+    details.animated-details.closing .details-wrapper {
+      opacity: 0;
+      padding: 0 1rem;
+    }
+
+    /* Markdown content styling */
+    .markdown {
+      line-height: 1.6;
+    }
+
+    .markdown p {
+      margin: 0.5rem 0;
+    }
+
+    .markdown ul, .markdown ol {
+      margin: 0.5rem 0;
+      padding-left: 1.5rem;
+    }
+
+    .markdown li {
+      margin: 0.25rem 0;
+    }
+
+    .markdown strong {
+      font-weight: 600;
+    }
+
+    .markdown code {
+      background-color: rgba(0, 0, 0, 0.05);
+      padding: 0.2rem 0.4rem;
+      border-radius: 3px;
+      font-family: 'Courier New', monospace;
+      font-size: 0.9em;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .faq-section {
+        margin: 24px 0;
+      }
+
+      .faq-category {
+        font-size: 18px;
+        margin: 20px 0 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="header">
+    <div class="container header-card">
+      <div class="project-main" style="width: 100%;">
+        <div class="title-desc">
+          <h1 class="title">FAQ</h1>
+          <div class="desc markdown">
+            <p>Frequently Asked Questions about Java & Stuff</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="container main" style="grid-template-columns: 1fr;">
+    <section>
+      <!-- Installation & Setup -->
+      <div class="faq-section">
+        <div class="faq-category">Installation & Setup</div>
+
+        <details class="animated-details">
+          <summary>How do I install Java & Stuff?</summary>
+          <div class="details-wrapper">
+            <div class="markdown">
+              <p><strong>Prerequisites:</strong></p>
+              <ul>
+                <li>Minecraft Java Edition 1.21.8 or compatible version</li>
+                <li>Fabric Loader installed</li>
+                <li>Java Runtime Environment (JRE) 17 or higher</li>
+              </ul>
+              <p><strong>Installation Steps:</strong></p>
+              <ol>
+                <li>Download the modpack from the <a href="/download/">Download page</a></li>
+                <li>Extract the ZIP file to your Minecraft data folder</li>
+                <li>Launch Minecraft using the Fabric loader</li>
+                <li>Select "Java & Stuff" from your game versions</li>
+                <li>Play and enjoy!</li>
+              </ol>
+              <p><em>For detailed setup instructions, visit our Discord community for step-by-step support.</em></p>
+            </div>
+          </div>
+        </details>
+
+        <details class="animated-details">
+          <summary>What are the system requirements?</summary>
+          <div class="details-wrapper">
+            <div class="markdown">
+              <p><strong>Minimum Requirements:</strong></p>
+              <ul>
+                <li>CPU: Intel Core i5 / AMD Ryzen 5 or equivalent</li>
+                <li>RAM: 8 GB (16 GB recommended)</li>
+                <li>GPU: NVIDIA / AMD with 2GB VRAM</li>
+                <li>Storage: 10+ GB SSD space</li>
+                <li>Java: JRE 17 or higher</li>
+              </ul>
+              <p><strong>Recommended Requirements:</strong></p>
+              <ul>
+                <li>CPU: Intel Core i7 / AMD Ryzen 7</li>
+                <li>RAM: 16 GB or more</li>
+                <li>GPU: NVIDIA RTX 2060 / AMD RX 5700 XT or better</li>
+                <li>Storage: 10+ GB NVMe SSD space</li>
+              </ul>
+              <p>Performance depends heavily on your specific hardware and render distance settings.</p>
+            </div>
+          </div>
+        </details>
+
+        <details class="animated-details">
+          <summary>How do I update the modpack?</summary>
+          <div class="details-wrapper">
+            <div class="markdown">
+              <p>Updates are released periodically with bug fixes and new features.</p>
+              <p><strong>To update:</strong></p>
+              <ol>
+                <li>Download the latest version from the <a href="/download/">Download page</a></li>
+                <li>Back up your world saves (in the <code>saves/</code> folder)</li>
+                <li>Replace the mods folder with the new version</li>
+                <li>Restore your world saves</li>
+                <li>Launch the game</li>
+              </ol>
+              <p><em>Always check the changelog for breaking changes or mod compatibility notes before updating.</em></p>
+            </div>
+          </div>
+        </details>
+      </div>
+
+      <!-- Gameplay & Features -->
+      <div class="faq-section">
+        <div class="faq-category">Gameplay & Features</div>
+
+        <details class="animated-details">
+          <summary>What is "Actions & Stuff"?</summary>
+          <div class="details-wrapper">
+            <div class="markdown">
+              <p>Java & Stuff is a carefully curated modpack designed to replicate the "Actions & Stuff" experience on Minecraft Java Edition. It focuses on:</p>
+              <ul>
+                <li><strong>Enhanced Animations:</strong> Smooth character and item animations</li>
+                <li><strong>Immersive Gameplay:</strong> Better visual and audio feedback</li>
+                <li><strong>Quality of Life:</strong> Useful utilities and improvements</li>
+                <li><strong>Performance:</strong> Optimized to run smoothly on most systems</li>
+              </ul>
+              <p>The modpack combines carefully selected mods to create a cohesive, polished experience.</p>
+            </div>
+          </div>
+        </details>
+
+        <details class="animated-details">
+          <summary>What mods are included?</summary>
+          <div class="details-wrapper">
+            <div class="markdown">
+              <p>The modpack includes a carefully selected collection of mods focused on animations, visual improvements, and gameplay enhancements.</p>
+              <p><strong>Main Categories:</strong></p>
+              <ul>
+                <li><strong>Animation Mods:</strong> Smooth 3rd-person animations, weapon animations, and entity animations</li>
+                <li><strong>Visual Enhancements:</strong> Better particles, improved lighting, and UI improvements</li>
+                <li><strong>Performance Optimization:</strong> Lithium, C2ME, and Sodium for better FPS</li>
+                <li><strong>Quality of Life:</strong> Inventory management, keybind utilities, and conveniences</li>
+              </ul>
+              <p>For a complete mod list, check the mod manifest included with the modpack download.</p>
+            </div>
+          </div>
+        </details>
+
+        <details class="animated-details">
+          <summary>Can I add or remove mods?</summary>
+          <div class="details-wrapper">
+            <div class="markdown">
+              <p>Yes! The modpack is designed to be customizable. You can add or remove mods as long as they're compatible with:</p>
+              <ul>
+                <li>Fabric Loader 0.15.x+</li>
+                <li>Minecraft 1.21.8</li>
+                <li>The existing mod dependencies</li>
+              </ul>
+              <p><strong>Important:</strong> Removing core mods like Sodium or certain animation mods may break the intended experience. We recommend only adding mods unless you know what you're doing.</p>
+              <p>For help with mod compatibility, ask in our <a href="/discord/">Discord community</a>.</p>
+            </div>
+          </div>
+        </details>
+
+        <details class="animated-details">
+          <summary>Will this run on lower-end systems?</summary>
+          <div class="details-wrapper">
+            <div class="markdown">
+              <p>Yes, the modpack includes heavy optimizations for performance! However, you may need to adjust settings:</p>
+              <ul>
+                <li>Lower render distance (8-12 chunks)</li>
+                <li>Disable fancy graphics and particles</li>
+                <li>Use Fast rendering mode in Sodium settings</li>
+                <li>Reduce view bobbing and animations quality</li>
+              </ul>
+              <p>Most players with 8GB+ RAM and a dedicated GPU should have no issues at 1080p 60+ FPS.</p>
+            </div>
+          </div>
+        </details>
+      </div>
+
+      <!-- Troubleshooting -->
+      <div class="faq-section">
+        <div class="faq-category">Troubleshooting</div>
+
+        <details class="animated-details">
+          <summary>The game won't launch or crashes on startup</summary>
+          <div class="details-wrapper">
+            <div class="markdown">
+              <p><strong>Try these solutions:</strong></p>
+              <ol>
+                <li><strong>Check Java version:</strong> Ensure you have JRE 17+ installed (run <code>java -version</code> in terminal)</li>
+                <li><strong>Update your GPU drivers</strong> to the latest version</li>
+                <li><strong>Allocate more RAM:</strong> Go to launcher settings and increase allocated RAM to 8-10GB</li>
+                <li><strong>Delete the logs folder</strong> and try launching again</li>
+                <li><strong>Reinstall Fabric Loader</strong> to the latest version</li>
+              </ol>
+              <p>If the problem persists, share your crash log in the <a href="/discord/">Discord</a> for community support.</p>
+            </div>
+          </div>
+        </details>
+
+        <details class="animated-details">
+          <summary>I'm getting low FPS or lag</summary>
+          <div class="details-wrapper">
+            <div class="markdown">
+              <p><strong>Performance optimization tips:</strong></p>
+              <ul>
+                <li><strong>Graphics:</strong> Lower render distance and reduce chunk update speed</li>
+                <li><strong>Sodium Settings:</strong> Enable Fast mode and disable animated textures</li>
+                <li><strong>RAM:</strong> Allocate 10-12GB if available</li>
+                <li><strong>Background Apps:</strong> Close other resource-intensive applications</li>
+                <li><strong>Chunks:</strong> Use C2ME's settings to optimize chunk rendering</li>
+              </ul>
+              <p>Check the Sodium settings menu for detailed graphics optimization options.</p>
+            </div>
+          </div>
+        </details>
+
+        <details class="animated-details">
+          <summary>Mods aren't loading or I get mod errors</summary>
+          <div class="details-wrapper">
+            <div class="markdown">
+              <p><strong>Common fixes:</strong></p>
+              <ol>
+                <li><strong>Verify mod files:</strong> Re-download the modpack and extract to a fresh folder</li>
+                <li><strong>Check mod versions:</strong> Ensure all mods are for 1.21.8</li>
+                <li><strong>Fabric installed?</strong> Make sure Fabric Loader is properly installed</li>
+                <li><strong>Duplicate mods:</strong> Remove any duplicate mod files from the mods folder</li>
+                <li><strong>Clear cache:</strong> Delete the <code>.minecraft/versions/</code> folder and launcher cache</li>
+              </ol>
+              <p>Check your latest.log file in the <code>.minecraft/</code> folder for specific error messages.</p>
+            </div>
+          </div>
+        </details>
+
+        <details class="animated-details">
+          <summary>How do I report bugs?</summary>
+          <div class="details-wrapper">
+            <div class="markdown">
+              <p>Found a bug? We'd love to hear about it!</p>
+              <p><strong>To report:</strong></p>
+              <ol>
+                <li>Join our <a href="/discord/">Discord server</a></li>
+                <li>Go to the #bug-reports channel</li>
+                <li>Include:
+                  <ul>
+                    <li>Detailed description of the bug</li>
+                    <li>Steps to reproduce it</li>
+                    <li>Your system specs</li>
+                    <li>Latest.log file (if applicable)</li>
+                  </ul>
+                </li>
+              </ol>
+              <p>Our team will investigate and work on a fix!</p>
+            </div>
+          </div>
+        </details>
+      </div>
+
+      <!-- Compatibility & Multiplayer -->
+      <div class="faq-section">
+        <div class="faq-category">Compatibility & Multiplayer</div>
+
+        <details class="animated-details">
+          <summary>Can I use this on multiplayer servers?</summary>
+          <div class="details-wrapper">
+            <div class="markdown">
+              <p>Yes! Java & Stuff is designed to work with multiplayer servers. Most mods are client-side only, so they won't cause issues.</p>
+              <p><strong>Important notes:</strong></p>
+              <ul>
+                <li>Server-side mods may conflict - check with your server admin</li>
+                <li>Some visual mods are purely client-side and safe</li>
+                <li>Avoid PvP cheating mods or exploits (they're not included)</li>
+                <li>Ask your server if they allow modded clients before playing</li>
+              </ul>
+              <p>Most vanilla servers and modded servers accept Java & Stuff without issues.</p>
+            </div>
+          </div>
+        </details>
+
+        <details class="animated-details">
+          <summary>Can I use this on Realms?</summary>
+          <div class="details-wrapper">
+            <div class="markdown">
+              <p>Yes! Since most mods are client-side, they work fine with Realms.</p>
+              <p><strong>To play with Realms:</strong></p>
+              <ol>
+                <li>Launch the modpack normally</li>
+                <li>Go to Multiplayer > Realms</li>
+                <li>Join your Realm as usual</li>
+              </ol>
+              <p>The modpack enhances your visuals and gameplay without affecting other players' experiences.</p>
+            </div>
+          </div>
+        </details>
+
+        <details class="animated-details">
+          <summary>Is Java & Stuff compatible with other modpacks?</summary>
+          <div class="details-wrapper">
+            <div class="markdown">
+              <p>No, Java & Stuff is a complete, pre-configured modpack. Installing it alongside other modpacks may cause conflicts.</p>
+              <p><strong>Instead:</strong></p>
+              <ul>
+                <li>Use separate Minecraft instances for different modpacks</li>
+                <li>Most launchers (CurseForge, MultiMC, Prism) support multiple installations</li>
+                <li>Each instance can have its own mod folder</li>
+              </ul>
+              <p>This prevents mod conflicts and keeps your gameplay smooth.</p>
+            </div>
+          </div>
+        </details>
+      </div>
+
+      <!-- Support & Community -->
+      <div class="faq-section">
+        <div class="faq-category">Support & Community</div>
+
+        <details class="animated-details">
+          <summary>Where can I get help?</summary>
+          <div class="details-wrapper">
+            <div class="markdown">
+              <p>Our community is here to help!</p>
+              <ul>
+                <li><strong>Discord:</strong> <a href="/discord/">Join our Discord server</a> for real-time support</li>
+                <li><strong>GitHub:</strong> Report issues on our GitHub repository</li>
+                <li><strong>FAQ:</strong> Check this page first - your question might already be answered</li>
+                <li><strong>Crash Logs:</strong> Share your logs in the Discord #support channel</li>
+              </ul>
+              <p>Our team and community members are active and happy to help troubleshoot issues!</p>
+            </div>
+          </div>
+        </details>
+
+        <details class="animated-details">
+          <summary>Can I stream or create content with Java & Stuff?</summary>
+          <div class="details-wrapper">
+            <div class="markdown">
+              <p><strong>Absolutely!</strong> We encourage content creators to use Java & Stuff.</p>
+              <p><strong>Requirements:</strong></p>
+              <ul>
+                <li>Credit the modpack and teams in your description</li>
+                <li>Link to the official website or download page</li>
+                <li>Be respectful to our community</li>
+              </ul>
+              <p>Tag us on social media with #JavaAndStuff - we'd love to see your content!</p>
+            </div>
+          </div>
+        </details>
+
+        <details class="animated-details">
+          <summary>How do I stay updated?</summary>
+          <div class="details-wrapper">
+            <div class="markdown">
+              <p>Stay informed about modpack updates and news:</p>
+              <ul>
+                <li><strong>Discord:</strong> Join our <a href="/discord/">Discord</a> for announcements</li>
+                <li><strong>Twitter:</strong> Follow <a href="https://x.com/DenjisWorkspace">@DenjisWorkspace</a></li>
+                <li><strong>Website:</strong> Check back here for latest updates</li>
+                <li><strong>Notifications:</strong> Enable notifications in Discord for #announcements</li>
+              </ul>
+              <p>Major updates are always announced across all platforms.</p>
+            </div>
+          </div>
+        </details>
+
+        <details class="animated-details">
+          <summary>Can I contribute to the project?</summary>
+          <div class="details-wrapper">
+            <div class="markdown">
+              <p>Yes! We welcome contributors to Java & Stuff.</p>
+              <p><strong>Ways to contribute:</strong></p>
+              <ul>
+                <li><strong>Testing:</strong> Be a beta tester for new versions</li>
+                <li><strong>Feedback:</strong> Suggest mods or improvements in Discord</li>
+                <li><strong>Community:</strong> Help fellow players in the Discord server</li>
+                <li><strong>Content:</strong> Create guides, tutorials, or showcase videos</li>
+                <li><strong>Development:</strong> Reach out if you're interested in dev work</li>
+              </ul>
+              <p>Contact the team on <a href="/discord/">Discord</a> to get involved!</p>
+            </div>
+          </div>
+        </details>
+
+        <details class="animated-details">
+          <summary>What's the roadmap for Java & Stuff?</summary>
+          <div class="details-wrapper">
+            <div class="markdown">
+              <p><strong>Planned features and improvements:</strong></p>
+              <ul>
+                <li>Regular updates for new Minecraft versions</li>
+                <li>Enhanced animation packs and mod combinations</li>
+                <li>Performance improvements as new mods release</li>
+                <li>Community-requested features</li>
+                <li>Expanded mod ecosystem compatibility</li>
+              </ul>
+              <p>Follow our <a href="/discord/">Discord announcements</a> channel for progress updates and planned releases.</p>
+            </div>
+          </div>
+        </details>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-links">
+        <a href="/discord/" target="_blank" title="Discord"><i class="bi bi-discord"></i></a>
+        <a href="https://x.com/DenjisWorkspace" target="_blank" title="X (Twitter)"><i class="bi bi-twitter-x"></i></a>
+      </div>
+      <div class="footer-content">
+        <p>Developed by TheCrackersStudio</p>
+        <p>Built for the Minecraft Community.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script>
+    // Setup details animation for FAQ - matching main page pattern
+    function setupDetailsToggle(det) {
+      const summary = det.querySelector('summary');
+      const wrapper = det.querySelector('.details-wrapper');
+
+      if (!summary || !wrapper) return;
+
+      // Close by default
+      det.removeAttribute('open');
+      det.classList.remove('is-open');
+      det.classList.remove('closing');
+      wrapper.style.maxHeight = '0px';
+      wrapper.style.opacity = '0';
+
+      summary.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        if (!det.classList.contains('is-open')) {
+          // Opening animation
+          det.classList.add('is-open');
+          det.setAttribute('open', '');
+          
+          // Calculate scroll height synchronously for immediate animation
+          const scrollHeight = wrapper.scrollHeight;
+          wrapper.style.maxHeight = scrollHeight + 'px';
+          wrapper.style.opacity = '1';
+        } else {
+          // Closing animation
+          det.classList.add('closing');
+          det.classList.remove('is-open');
+          wrapper.style.maxHeight = '0px';
+          wrapper.style.opacity = '0';
+          
+          setTimeout(() => {
+            if (!det.classList.contains('is-open')) {
+              det.removeAttribute('open');
+              det.classList.remove('closing');
+            }
+          }, 500);
+        }
+      });
+    }
+
+    // Initialize all details elements when page loads
+    function initializeDetails() {
+      document.querySelectorAll('details.animated-details').forEach(setupDetailsToggle);
+    }
+
+    // Run when DOM is ready
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initializeDetails);
+    } else {
+      initializeDetails();
+    }
+  </script>
+</body>
+</html>
