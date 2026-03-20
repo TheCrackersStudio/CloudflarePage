@@ -178,11 +178,12 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             // Redirect to verify if accessed directly (not from verify page)
-            const referrer = document.referrer;
-            if (!referrer || !referrer.includes('/verify')) {
+            if (!sessionStorage.getItem('fromVerify')) {
                 window.location.href = '/verify';
                 return;
             }
+            // Clear the flag after checking
+            sessionStorage.removeItem('fromVerify');
 
             // Context menu handling
             const contextMenu = document.getElementById('context-menu');
