@@ -40,8 +40,54 @@
     * {
       cursor: url('cursors/customcursor.png'), auto;
     }
-    a, button, [role="button"], .tab, .dlbtn-ver, input[type="submit"], input[type="button"], [onclick], .clickable, .gallery-img, details > summary {
+    a, button, [role="button"], .tab, .dlbtn-ver, input[type="submit"], input[type="button"], [onclick], .clickable, .gallery-img, details > summary, .context-menu-item {
       cursor: url('cursors/customcursor_hand_grab.png'), grab;
+    }
+
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 12px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--bg);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #555;
+      border-radius: 6px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #777;
+    }
+
+    /* Context menu styling */
+    .context-menu {
+      pointer-events: none;
+    }
+
+    .context-menu.show {
+      pointer-events: auto;
+    }
+
+    .context-menu-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 16px;
+      background: none;
+      border: none;
+      color: var(--text);
+      width: 100%;
+      text-align: left;
+      pointer-events: auto;
+      cursor: url('cursors/customcursor_hand_grab.png'), grab !important;
+    }
+
+    .context-menu-item:hover {
+      background: var(--panel);
+      cursor: url('cursors/customcursor_hand_grab.png'), grab !important;
     }
   </style>
 </head>
