@@ -56,6 +56,51 @@
       border-bottom: 2px solid var(--border);
     }
 
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    .header {
+      padding: 28px 0;
+    }
+
+    .header-card {
+      display: flex;
+      gap: 20px;
+      align-items: flex-start;
+      width: 100%;
+    }
+
+    .project-main {
+      display: flex;
+      width: 100%;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+
+    .title-desc {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .project-icon {
+      display: none;
+    }
+
+    .title {
+      font-size: 32px;
+      font-weight: 800;
+      margin: 0;
+      line-height: 1.1;
+    }
+
+    .desc {
+      color: var(--muted);
+      margin: 8px 0;
+    }
+
     /* Fix for animated-details wrapper in FAQ */
     details.animated-details {
       overflow: visible;
@@ -71,13 +116,17 @@
     }
 
     details.animated-details.is-open .details-wrapper {
+      max-height: 10000px;
       opacity: 1;
       padding: 0.75rem 1rem;
+      overflow: visible;
     }
 
     details.animated-details.closing .details-wrapper {
+      max-height: 0;
       opacity: 0;
       padding: 0 1rem;
+      overflow: hidden;
     }
 
     /* Markdown content styling */
@@ -119,6 +168,45 @@
       .faq-category {
         font-size: 18px;
         margin: 20px 0 12px;
+      }
+
+      .container {
+        padding: 0 12px;
+      }
+
+      .title {
+        font-size: 28px;
+        margin: 0 !important;
+      }
+
+      .title-desc {
+        margin: 0 !important;
+        padding: 0 !important;
+        grid-area: unset !important;
+      }
+
+      .header-card {
+        gap: 0;
+        flex-direction: column;
+        display: flex !important;
+        grid-template-columns: unset !important;
+        grid-template-areas: unset !important;
+        align-items: flex-start;
+      }
+
+      .project-main {
+        width: 100% !important;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .header {
+        padding: 20px 0 12px 0;
+      }
+
+      .desc {
+        margin: 8px 0 !important;
       }
     }
   </style>
@@ -518,7 +606,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <script>
-    // Setup details animation for FAQ - matching main page pattern
+    // Setup details animation for FAQ
     function setupDetailsToggle(det) {
       const summary = det.querySelector('summary');
       const wrapper = det.querySelector('.details-wrapper');
@@ -528,29 +616,19 @@
       // Close by default
       det.removeAttribute('open');
       det.classList.remove('is-open');
-      det.classList.remove('closing');
-      wrapper.style.maxHeight = '0px';
-      wrapper.style.opacity = '0';
 
       summary.addEventListener('click', (e) => {
         e.preventDefault();
         e.stopPropagation();
 
         if (!det.classList.contains('is-open')) {
-          // Opening animation
-          det.classList.add('is-open');
+          // Opening
           det.setAttribute('open', '');
-          
-          // Calculate scroll height synchronously for immediate animation
-          const scrollHeight = wrapper.scrollHeight;
-          wrapper.style.maxHeight = scrollHeight + 'px';
-          wrapper.style.opacity = '1';
+          det.classList.add('is-open');
         } else {
-          // Closing animation
-          det.classList.add('closing');
+          // Closing
           det.classList.remove('is-open');
-          wrapper.style.maxHeight = '0px';
-          wrapper.style.opacity = '0';
+          det.classList.add('closing');
           
           setTimeout(() => {
             if (!det.classList.contains('is-open')) {
