@@ -3,8 +3,10 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3762419161852881"
      crossorigin="anonymous"></script>
+  
   <title>Java & Stuff - Download</title>
   <meta name="description" content="Download the latest version of the Java & Stuff modpack for Minecraft Java Edition. Curated for animations, immersion, and enhanced gameplay.">
   <meta name="keywords" content="Minecraft, Minecraft Java, Java & Stuff, Minecraft Modpack, Download Minecraft Mods, Actions & Stuff, Fabric Modpack, Java and Stuff">
@@ -47,6 +49,32 @@
     .dropdown-card { background-color: rgb(40, 41, 46); border: 1px solid #2e2e3b; }
     .bg-blue { background-color: #0e87f9; }
     [x-cloak] { display: none !important; }
+
+    /* Custom Cursors */
+    * {
+      cursor: url('../cursors/customcursor.png'), auto;
+    }
+    a, button, [role="button"], .context-menu-item {
+      cursor: url('../cursors/customcursor_hand_grab.png'), grab;
+    }
+
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 12px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: rgb(22, 24, 28);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #555;
+      border-radius: 6px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #777;
+    }
 
     /* Context Menu Styles */
     .context-menu {
@@ -110,16 +138,18 @@
       color: #e7e7ee;
       font-size: 14px;
       font-weight: 500;
-      cursor: pointer;
+      cursor: url('../cursors/customcursor_hand_grab.png'), grab !important;
       transition: background 0.1s ease;
       text-align: left;
       font-family: inherit;
       user-select: none;
+      pointer-events: auto;
     }
 
     .context-menu-item:hover {
       background: #16161c;
       color: #0e87f9;
+      cursor: url('../cursors/customcursor_hand_grab.png'), grab !important;
     }
 
     .context-menu-item:active {
