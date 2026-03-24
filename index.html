@@ -127,12 +127,17 @@
       <div class="tabs">
         <div class="tab-slider"></div>
         <button class="tab active" data-tab="desc">Description</button>
+        <button class="tab" data-tab="changelog">Changelog</button>
         <button class="tab" data-tab="gallery">Gallery</button>
         <button class="tab" data-tab="versions">Versions</button>
       </div>
 
       <div class="tab-panel active" id="desc">
         <div id="desc-content" class="desc markdown"></div> </div>
+
+      <div class="tab-panel" id="changelog">
+        <div id="changelog-content" class="desc markdown"></div>
+      </div>
 
       <div class="tab-panel" id="gallery">
         <div class="gallery" id="gallery-list"></div> </div>
@@ -322,6 +327,98 @@
     const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
     /* ===============================
+      PRELOAD CACHE (localStorage)
+    ================================ */
+    const PRELOAD_CACHE_KEY = "jns_preload_cache_v1";
+    const PRELOAD_CACHE_SCHEMA = 1;
+
+    let cacheSnapshot = {
+      project: null,
+      changelogs: null,
+      gallery: null,
+      versionsFull: null,
+      downloadStats: null,
+    };
+
+    function readPreloadCache() {
+      try {
+        const raw = localStorage.getItem(PRELOAD_CACHE_KEY);
+        if (!raw) return null;
+        return JSON.parse(raw);
+      } catch {
+        return null;
+      }
+    }
+
+    function isPreloadCacheUsable(c) {
+      if (!c || c.v !== PRELOAD_CACHE_SCHEMA) return false;
+      if (typeof c.savedAt !== "number") return false;
+      if (!Array.isArray(c.versionsMeta)) return false;
+      if (!("project" in c)) return false;
+      if (!Array.isArray(c.changelogs)) return false;
+      if (!Array.isArray(c.gallery)) return false;
+      if (!Array.isArray(c.versionsFull)) return false;
+      if (c.downloadStats != null && typeof c.downloadStats !== "object") return false;
+      return true;
+    }
+
+    function persistPreloadCache() {
+      try {
+        const payload = {
+          v: PRELOAD_CACHE_SCHEMA,
+          savedAt: Date.now(),
+          versionsMeta: versionsCache,
+          project: cacheSnapshot.project,
+          changelogs: cacheSnapshot.changelogs,
+          gallery: cacheSnapshot.gallery,
+          versionsFull: cacheSnapshot.versionsFull,
+          downloadStats: cacheSnapshot.downloadStats,
+        };
+        localStorage.setItem(PRELOAD_CACHE_KEY, JSON.stringify(payload));
+      } catch (e) {
+        console.warn("Preload cache save failed:", e);
+      }
+    }
+
+    function hydrateFromPreloadCache(c) {
+      versionsCache = c.versionsMeta || [];
+      cacheSnapshot.project = c.project;
+      cacheSnapshot.changelogs = c.changelogs;
+      cacheSnapshot.gallery = c.gallery;
+      cacheSnapshot.versionsFull = c.versionsFull;
+      cacheSnapshot.downloadStats = c.downloadStats;
+      renderDescription(c.project);
+      renderChangelogEntries(c.changelogs || []);
+      renderGalleryData(c.gallery || []);
+      renderVersionsData(c.versionsFull || []);
+      applyDownloadStats(c.downloadStats || { total_downloads: 0 });
+    }
+
+    async function refreshPreloadInBackground() {
+      const runSafe = async (label, fn) => {
+        try {
+          setStatus(label);
+          await fn();
+          return true;
+        } catch (e) {
+          console.error(`${label} failed:`, e);
+          return false;
+        }
+      };
+      try {
+        await runSafe("Refreshing…", loadAllDownloads);
+        await runSafe("Refreshing description…", loadDescription);
+        await runSafe("Refreshing changelog…", loadChangelog);
+        await runSafe("Refreshing gallery…", loadGallery);
+        await runSafe("Refreshing versions…", loadVersions);
+        await runSafe("Refreshing stats…", loadDownloadCount);
+        persistPreloadCache();
+      } catch (e) {
+        console.error("Background refresh failed:", e);
+      }
+    }
+
+    /* ===============================
       SPLASH HELPERS
     ================================ */
     const splash = document.getElementById("splash");
@@ -338,6 +435,12 @@
     /* ===============================
       DATA LOADERS
     ================================ */
+    function renderDescription(data) {
+      const container = document.getElementById("desc-content");
+      container.innerHTML = marked.parse(data?.description || "No description.");
+      enhanceMarkdownDetails(container);
+    }
+
     async function loadDescription() {
       setStatus("Loading description…");
       const { data, error } = await supabase
@@ -347,9 +450,11 @@
 
       if (error) throw error;
 
-      const container = document.getElementById("desc-content");
-      container.innerHTML = marked.parse(data?.description || "No description.");
+      cacheSnapshot.project = data ?? null;
+      renderDescription(data);
+    }
 
+    function enhanceMarkdownDetails(container) {
       // Wrap each heading that is followed by a list into an animated collapsible
       Array.from(container.querySelectorAll("h2, h3")).forEach(heading => {
         const nextEl = heading.nextElementSibling;
@@ -451,6 +556,80 @@
       container.querySelectorAll("details").forEach(setupDetailsToggle);
     }
 
+    function formatChangelogDate(value) {
+      if (!value) return "Unknown date";
+      const d = new Date(value);
+      if (Number.isNaN(d.getTime())) return "Unknown date";
+      return d.toLocaleDateString("en-US", {
+        month: "short",
+        day: "numeric",
+        year: "numeric"
+      });
+    }
+
+    function escapeHtml(text) {
+      return String(text ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+    }
+
+    function renderChangelogEntries(entries) {
+      const container = document.getElementById("changelog-content");
+      if (!entries.length) {
+        container.innerHTML = '<p class="changelog-empty">No changelog yet.</p>';
+        return;
+      }
+
+      container.innerHTML = entries
+        .map((entry) => {
+          const versionsLabel = escapeHtml(entry.versions || entry.version || "—");
+          const dateLabel = formatChangelogDate(entry.created_at || entry.date);
+          const markdownBody = marked.parse(entry.changelog || entry.content || "");
+
+          return `
+            <article class="changelog-entry">
+              <div class="changelog-left" aria-hidden="true">
+                <div class="changelog-connector"></div>
+                <div class="changelog-dot"></div>
+              </div>
+              <div class="changelog-body">
+                <div class="changelog-headline">
+                  <span class="changelog-version">[${versionsLabel}]</span>
+                  <span class="changelog-date">on ${dateLabel}</span>
+                </div>
+                <div class="changelog-markdown markdown">${markdownBody}</div>
+              </div>
+            </article>
+          `;
+        })
+        .join("");
+
+      container.querySelectorAll(".changelog-markdown").forEach(enhanceMarkdownDetails);
+    }
+
+    async function loadChangelog() {
+      setStatus("Loading changelog…");
+      const container = document.getElementById("changelog-content");
+      try {
+        const { data, error } = await supabase
+          .from("changelogs")
+          .select("*")
+          .order("created_at", { ascending: false });
+
+        if (error) throw error;
+
+        const entries = Array.isArray(data) ? data : [];
+        cacheSnapshot.changelogs = entries;
+        renderChangelogEntries(entries);
+      } catch (e) {
+        console.error("Failed to load changelog:", e);
+        container.innerHTML = '<p class="changelog-empty">Failed to load changelog.</p>';
+      }
+    }
+
     
       /* ===============================
         IMAGE VIEWER (LIGHTBOX)
@@ -510,35 +689,34 @@
         if (e.key === "ArrowRight") ltNext && ltNext.click();
       });
 
+      function renderGalleryData(data) {
+        const container = document.getElementById("gallery-list");
+        container.innerHTML = "";
+        const items = data || [];
+        items.forEach((item, index) => {
+          const div = document.createElement("div");
+          div.className = "gcard";
+          div.innerHTML = `<div class="gimg"><img src="${item.image_url}" class="gallery-img"/></div><div class="gbody"><div class="gtitle">${item.title}</div><div class="gmeta">${item.details}</div></div>`;
+          div.addEventListener("click", () => openLightbox(index, items));
+          container.appendChild(div);
+        });
+      }
+
       async function loadGallery() {
         setStatus("Loading gallery…");
         const { data, error } = await supabase.from("gallery_items").select("*").order("created_at", { ascending: true });
         if (error) throw error;
-        const container = document.getElementById("gallery-list");
-        container.innerHTML = "";
-        data.forEach((item, index) => {
-          const div = document.createElement("div");
-          div.className = "gcard";
-          div.innerHTML = `<div class="gimg"><img src="${item.image_url}" class="gallery-img"/></div><div class="gbody"><div class="gtitle">${item.title}</div><div class="gmeta">${item.details}</div></div>`;
-          div.addEventListener("click", () => openLightbox(index, data));
-          container.appendChild(div);
-        });
+        const items = data || [];
+        cacheSnapshot.gallery = items;
+        renderGalleryData(items);
       }
   
 
-    async function loadVersions() {
-      setStatus("Loading versions…");
-      const { data, error } = await supabase
-        .from("versions")
-        .select("*")
-        .order("created_at", { ascending: false });
-
-      if (error) throw error;
-
+    function renderVersionsData(data) {
       const container = document.getElementById("versions-list");
       container.innerHTML = "";
-
-      data.forEach(item => {
+      (data || []).forEach(item => {
+        const platforms = Array.isArray(item.platforms) ? item.platforms : [];
         const row = document.createElement("div");
         row.className = "rowv";
         row.innerHTML = `
@@ -552,7 +730,7 @@
           <div class="ver-meta">
             <div class="ver-game"><span class="badge">${item.game_version}</span></div>
             <div class="platforms">
-              ${item.platforms.map(p => `<span class="badge pill">${p}</span>`).join("")}
+              ${platforms.map(p => `<span class="badge pill">${p}</span>`).join("")}
             </div>
           </div>
           <div class="ver-actions">
@@ -563,6 +741,20 @@
         `;
         container.appendChild(row);
       });
+    }
+
+    async function loadVersions() {
+      setStatus("Loading versions…");
+      const { data, error } = await supabase
+        .from("versions")
+        .select("*")
+        .order("created_at", { ascending: false });
+
+      if (error) throw error;
+
+      const rows = data || [];
+      cacheSnapshot.versionsFull = rows;
+      renderVersionsData(rows);
     }
 
     function formatNumber(num) {
@@ -579,6 +771,11 @@
       return num.toString();
     }
 
+    function applyDownloadStats(data) {
+      const total = Number(data?.total_downloads ?? 0);
+      document.getElementById("download-count").textContent = formatNumber(total);
+    }
+
     async function loadDownloadCount() {
       setStatus("Loading download stats…");
       const { data, error } = await supabase
@@ -589,8 +786,8 @@
 
       if (error) throw error;
 
-      document.getElementById("download-count").textContent =
-        formatNumber(data.total_downloads);
+      cacheSnapshot.downloadStats = data ?? { total_downloads: 0 };
+      applyDownloadStats(data);
     }
 
     /* ===============================
@@ -859,6 +1056,36 @@
       slider.style.left = `${activeTab.offsetLeft}px`;
     }
 
+    const TAB_IDS = ["desc", "changelog", "gallery", "versions"];
+
+    function setTabHash(tabId) {
+      const path = window.location.pathname + window.location.search;
+      history.replaceState(null, "", `${path}#${tabId}`);
+    }
+
+    async function activateTab(tabId) {
+      if (!TAB_IDS.includes(tabId)) return;
+      const tabBtn = document.querySelector(`.tab[data-tab="${tabId}"]`);
+      if (!tabBtn) return;
+
+      tabs.forEach(t => t.classList.remove("active"));
+      panels.forEach(p => p.classList.remove("active"));
+
+      tabBtn.classList.add("active");
+      const panel = document.getElementById(tabId);
+      if (panel) panel.classList.add("active");
+      updateSlider(tabBtn);
+
+      if (tabId === "changelog") await loadChangelog();
+      if (tabId === "gallery") await loadGallery();
+      if (tabId === "versions") await loadVersions();
+    }
+
+    function tabIdFromHash() {
+      const h = (window.location.hash || "").replace(/^#/, "").trim();
+      return TAB_IDS.includes(h) ? h : null;
+    }
+
     // Initialize slider position
     const activeTabInit = document.querySelector('.tab.active');
     if (activeTabInit) {
@@ -869,19 +1096,15 @@
       tab.addEventListener('click', async () => {
         if (tab.classList.contains('active')) return;
 
-        tabs.forEach(t => t.classList.remove('active'));
-        panels.forEach(p => p.classList.remove('active'));
-
-        tab.classList.add('active');
-        updateSlider(tab);
-
         const target = tab.getAttribute('data-tab');
-        const panel = document.getElementById(target);
-        if (panel) panel.classList.add('active');
-
-        if (target === "gallery") await loadGallery();
-        if (target === "versions") await loadVersions();
+        setTabHash(target);
+        await activateTab(target);
       });
+    });
+
+    window.addEventListener("hashchange", async () => {
+      const id = tabIdFromHash();
+      if (id) await activateTab(id);
     });
 
     window.addEventListener('resize', () => {
@@ -894,27 +1117,65 @@
         await new Promise(r => window.addEventListener("load", r, { once: true }));
       }
 
-      try {
-        setStatus("Preparing download…");
-        await loadAllDownloads();
-        setStatus("Loading description…");
-        await loadDescription();
-        await waitForImages(document.getElementById("desc-content"));
-        setStatus("Loading gallery…");
-        await loadGallery();
-        await waitForImages(document.getElementById("gallery-list"));
-        setStatus("Loading versions…");
-        await loadVersions();
-        await waitForImages(document.getElementById("versions-list"));
-        setStatus("Loading download stats…");
-        await loadDownloadCount();
-        setStatus("Finalizing…");
-        await sleep(500);
-      } catch (e) {
-        console.error(e);
-        setStatus("Loaded with warnings");
-        await sleep(1000);
+      const stored = readPreloadCache();
+      if (isPreloadCacheUsable(stored)) {
+        try {
+          hydrateFromPreloadCache(stored);
+          await waitForImages(document.getElementById("desc-content"));
+          await waitForImages(document.getElementById("changelog-content"));
+          await waitForImages(document.getElementById("gallery-list"));
+          await waitForImages(document.getElementById("versions-list"));
+          const fromHashCached = tabIdFromHash();
+          if (fromHashCached) await activateTab(fromHashCached);
+          splash.classList.add("hidden");
+          document.body.style.overflow = "auto";
+          const activeCached = document.querySelector(".tab.active");
+          if (activeCached) setTimeout(() => updateSlider(activeCached), 0);
+          void refreshPreloadInBackground();
+          return;
+        } catch (e) {
+          console.error("Preload cache hydrate failed, showing splash:", e);
+        }
       }
+
+      cacheSnapshot = {
+        project: null,
+        changelogs: null,
+        gallery: null,
+        versionsFull: null,
+        downloadStats: null,
+      };
+
+      const runSafe = async (label, fn) => {
+        try {
+          setStatus(label);
+          await fn();
+          return true;
+        } catch (e) {
+          console.error(`${label} failed:`, e);
+          return false;
+        }
+      };
+
+      setStatus("Preparing download…");
+      await runSafe("Preparing download…", loadAllDownloads);
+      await runSafe("Loading description…", loadDescription);
+      await waitForImages(document.getElementById("desc-content"));
+      await runSafe("Loading changelog…", loadChangelog);
+      await waitForImages(document.getElementById("changelog-content"));
+      await runSafe("Loading gallery…", loadGallery);
+      await waitForImages(document.getElementById("gallery-list"));
+      await runSafe("Loading versions…", loadVersions);
+      await waitForImages(document.getElementById("versions-list"));
+      await runSafe("Loading download stats…", loadDownloadCount);
+      setStatus("Finalizing…");
+      await sleep(500);
+
+      persistPreloadCache();
+
+      const fromHash = tabIdFromHash();
+      if (fromHash) await activateTab(fromHash);
+
       splash.classList.add("hidden");
       document.body.style.overflow = "auto";
     }
@@ -1020,7 +1281,9 @@
 
     nextBtn.addEventListener("click", () => slideTo("next"));
     prevBtn.addEventListener("click", () => slideTo("prev"));
-    closeBtn.addEventListener("click", () => lightbox.classList.remove("open"));
+    if (closeBtn) {
+      closeBtn.addEventListener("click", () => lightbox.classList.remove("open"));
+    }
 
     document.getElementById("gallery-list").addEventListener("click", e => {
       const img = e.target.closest(".gallery-img");
@@ -1031,7 +1294,7 @@
 
     document.addEventListener("keydown", e => {
       if (!lightbox.classList.contains("open")) return;
-      if (e.key === "Escape") closeBtn.click();
+      if (e.key === "Escape" && closeBtn) closeBtn.click();
       if (e.key === "ArrowRight") nextBtn.click();
       if (e.key === "ArrowLeft") prevBtn.click();
     });
