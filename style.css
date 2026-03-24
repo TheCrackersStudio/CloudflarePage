@@ -2,6 +2,8 @@
 /* Global Variables & Resets            */
 /* ==================================== */
 
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
 :root {
   /* Colors */
   --bg: rgb(22, 24, 28);        /* Dark background */
@@ -17,8 +19,6 @@
   --radius: 14px;       /* Standard border radius */
   --shadow: 0 6px 18px rgba(0, 0, 0, 0.45); /* Box shadow for cards */
 }
-
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
 @font-face {
   font-family: SFPro; /* set name */
@@ -361,6 +361,109 @@ section {
 
 .markdown li {
   margin: 6px 0;
+}
+
+/* Changelog timeline */
+#changelog-content {
+  position: relative;
+  margin: 0;
+  padding-left: 0;
+}
+
+.changelog-entry {
+  position: relative;
+  display: grid;
+  grid-template-columns: 24px 1fr;
+  gap: 12px;
+  margin: 0;
+  padding-bottom: 22px; /* spacing between segments */
+}
+
+.changelog-left {
+  position: relative;
+  width: 24px;
+  display: flex;
+  justify-content: center;
+}
+
+.changelog-connector {
+  position: absolute;
+  left: 50%;
+  /* Start near the dot center so each entry has its own segment */
+  top: 12px;
+  bottom: 0;
+  width: 2px;
+  transform: translateX(-50%);
+  background: rgba(14, 135, 249, 0.95);
+}
+
+.changelog-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--blue);
+  margin-top: 8px;
+  position: relative;
+  box-shadow: 0 0 0 4px rgba(14, 135, 249, 0.18);
+}
+
+.changelog-body {
+  background: transparent;
+}
+
+.changelog-headline {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px;
+  margin: 0;
+  color: #ffffff;
+  font-size: 16px;
+  line-height: 1.2;
+  font-weight: 800;
+}
+
+.changelog-version {
+  color: #ffffff;
+}
+
+.changelog-label {
+  color: #ffffff;
+}
+
+.changelog-date {
+  color: #aeb2c3;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.changelog-markdown {
+  margin-top: 8px;
+}
+
+.changelog-markdown ul,
+.changelog-markdown ol {
+  margin: 8px 0 0;
+}
+
+.changelog-markdown li {
+  color: #d6d6e4;
+  font-size: 16px;
+  line-height: 1.4;
+  margin: 4px 0;
+}
+
+.changelog-markdown p {
+  color: #d6d6e4;
+  font-size: 16px;
+  line-height: 1.4;
+  margin: 4px 0;
+}
+
+
+.changelog-empty {
+  color: var(--muted);
+  margin: 0;
 }
 
 /* Gallery Section */
@@ -1225,6 +1328,39 @@ details.is-open .details-wrapper {
   
   .tab-panel {
     padding: 20px;
+  }
+
+  .changelog-entry {
+    grid-template-columns: 20px 1fr;
+    gap: 10px;
+    padding-bottom: 18px;
+  }
+
+  .changelog-left {
+    width: 20px;
+  }
+
+  .changelog-connector {
+    top: 10px;
+  }
+
+  .changelog-dot {
+    width: 12px;
+    height: 12px;
+    margin-top: 6px;
+  }
+
+  .changelog-headline {
+    font-size: 16px;
+  }
+
+  .changelog-date {
+    font-size: 16px;
+  }
+
+  .changelog-markdown li,
+  .changelog-markdown p {
+    font-size: 16px;
   }
 
   /* Gallery adjustments */
