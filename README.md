@@ -1,0 +1,1 @@
+denji, i dont know if your ever gonna read this but i just opened the site for the first time and saw that. goopi and all our team decided to stop making the pack cause developement was slow and gokuspirit who made like everything quit and deleted like all his files before sharing. i know that you might be mad at this but, i ddint decide this so go get mad at goopi
