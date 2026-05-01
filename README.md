@@ -8,3 +8,6 @@ new school chromebooks
 idk im just saying shit
 stay safe
 maybe if ur wifi back we could start a mc server
+
+i made the website look exactly like modronth
+if i use my computer i might send some images in a few days
