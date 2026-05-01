@@ -1,13 +1,3 @@
-yo yea we could chat here i only check about once every two days. holy shit everhthing uou missed
-trumps third assiantiaton attempt (failed)
-pil price in hong kong is 15 usd
-i got promoted to senior support!
-worked alot on the discord
-talked witj goopi a bunch
-new school chromebooks
-idk im just saying shit
-stay safe
-maybe if ur wifi back we could start a mc server
-
-i made the website look exactly like modronth
-if i use my computer i might send some images in a few days
+Yeah we could chat here. I did alot of work on the site, I'll send a image if I can. If I feel like this I'll turn your message into a toast. 
+I don't know any backend but I'm trying to make a message like site kind off instead of github files. Do you have a Each person creates a GitHub Personal Access Token (classic, with repo scope)
+(Dont ask wtf that is i have no idea)
