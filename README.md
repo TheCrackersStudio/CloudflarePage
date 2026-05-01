@@ -1,3 +1,9 @@
-hey Nuz, yeah i checked the repo daily. its alright. i get it Java&Stuff was gonna finally break down one day... dw im just happy i made something that made many people experiance A&S on java, even if it didn't get completed...and the team, tell them its alright im not mad or anything...Goku was scared about getting cought. lawsuits. DMCA copyright,he wasn't ready. the day i come back, i might continue...but i think J&S is ready to retire!🫡 i would make other stuff. new things,but i've had enough with the hate, the falling apart, the Copyright strikes, with Actions & Stuff. we can just chat here if you wanna ask questions or any of the members and friends have questions for me😂 yeah i think thats enough for this message, Peace out.
-
-- Denji
+yo yea we could chat here i only check about once every two days. holy shit everhthing uou missed
+trumps third assiantiaton attempt (failed)
+pil price in hong kong is 15 usd
+i got promoted to senior support!
+worked alot on the discord
+talked witj goopi a bunch
+new school chromebooks
+idk im just saying shit
+stay safe
