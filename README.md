@@ -6,3 +6,4 @@ I don't know any backend but I'm trying to make a message like site kind off ins
 <img width="726" height="790" alt="image" src="https://github.com/user-attachments/assets/690958f8-aea2-47ca-b7cf-10594efba111" />
 Holy vibe code. I'm gonna test this shit to see if it works.
 Can I get your email?
+It partially works, token stored client side fully html. Just gonna prompt a bit more. Uses GitHub Issues messaging as backend.
