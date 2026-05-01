@@ -7,3 +7,4 @@ talked witj goopi a bunch
 new school chromebooks
 idk im just saying shit
 stay safe
+maybe if ur wifi back we could start a mc server
