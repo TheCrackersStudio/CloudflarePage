@@ -1,7 +1,10 @@
-there can we four scenarios with that guy who is pretty active:
-1. the supporters of this f ing regime get unfiltered internet access
-2. he is filthy rich and buys vpn's (they are getting more expensive every day)
-3. he has a company on his name and bought the "Pro Internet" they are offering to bussinesses
-4. there is this funny method where you can run this MasterHTTPRelay vpn thingy that SNI spoofs google's crawler bots and gives the access to you, i got youtube and telegram from that but i couldn't run discord
+He did method 4 with a backend starlink proxy. 
+Ther could be a way you could get on discord
+It might not work. 
+Normally people use it to unblock games in school but we know of chinese people using it to bypass their filter
+Its called dogeub 
+https://github.com/xorynix/dogeub
+download the files as zip, extract and run the start file.
+it might not work cause the wisp might not be able to get through
 
-also yeah, you cooked
+still workking on the backend message thingy
