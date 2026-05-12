@@ -89,6 +89,67 @@
       background: var(--panel);
       cursor: url('cursors/customcursor_hand_grab.png'), grab !important;
     }
+
+    /* Discontinued popup */
+    #discontinued-popup {
+      position: fixed;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      background: rgba(22, 24, 28, 0.95);
+      z-index: 9999;
+      padding: 24px;
+    }
+
+    #discontinued-popup.visible {
+      display: flex;
+    }
+
+    #discontinued-popup .popup-card {
+      max-width: 560px;
+      width: 100%;
+      background: var(--bg);
+      border: none;
+      border-radius: 28px;
+      padding: 32px;
+      text-align: center;
+      box-shadow: 0 28px 80px rgba(0, 0, 0, 0.35);
+      backdrop-filter: blur(10px);
+    }
+
+    #discontinued-popup h2 {
+      margin: 0 0 14px;
+      font-size: 2rem;
+      color: var(--blue);
+      letter-spacing: 0.02em;
+    }
+
+    #discontinued-popup p {
+      margin: 0 0 24px;
+      color: var(--text);
+      line-height: 1.7;
+      font-size: 1rem;
+      max-width: 100%;
+    }
+
+    #discontinued-popup button {
+      border: none;
+      background: var(--blue);
+      color: #fff;
+      font-weight: 700;
+      padding: 14px 34px;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: transform 0.2s ease, opacity 0.2s ease;
+      box-shadow: none;
+    }
+
+    #discontinued-popup button:hover {
+      transform: none;
+      opacity: 0.95;
+      background: rgba(14, 135, 249, 0.9);
+    }
   </style>
 </head>
 <body>
@@ -100,6 +161,16 @@
     <div id="splash-status">Starting…</div>
   </div>
 </div>
+
+  <div id="discontinued-popup" aria-live="assertive" role="dialog" aria-modal="true">
+    <div class="popup-card">
+      <h2>Sadly, Java & Stuff Has Ended</h2>
+      <p><strong>Sadly, our work has always been free and we have been working with scraps.</strong><br>
+      Our few developers, the owner in war, and other reasons mean we have sadly ended production of Java & Stuff.</p>
+      <p>The website will remain up and you can still download the files. Thank you.</p>
+      <button id="dismiss-discontinued">I Understand</button>
+    </div>
+  </div>
 
   <header class="header">
     <div class="container header-card">
@@ -313,6 +384,18 @@
   </div>
 </div>
 
+  <script>
+    window.addEventListener("load", function () {
+      const popup = document.getElementById("discontinued-popup");
+      const dismiss = document.getElementById("dismiss-discontinued");
+      if (popup && dismiss) {
+        popup.classList.add("visible");
+        dismiss.addEventListener("click", function () {
+          popup.classList.remove("visible");
+        });
+      }
+    });
+  </script>
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <script type="module">
     import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
